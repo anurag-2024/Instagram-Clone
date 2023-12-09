@@ -2,7 +2,9 @@
     display: flex;
     width: 100%;
   }
-  
+  .disablePointerEvents{
+    pointer-events: none;
+}
   .explore {
     height: 100%;
     width: calc(100% - 16%);

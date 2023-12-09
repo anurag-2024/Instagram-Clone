@@ -30,6 +30,16 @@
         margin-top: 1.2rem;
         .logoinsta{
             margin-left: 1rem;
+            .iconinsta{
+                width: 3rem;
+                height: 3rem;
+                padding: 0.6rem;
+                margin-left: -0.7rem;
+                &:hover{
+                    background-color: rgb(234, 231, 231);
+                    border-radius: 8px;
+                }
+            }
         }
         span{
             width: 100%;

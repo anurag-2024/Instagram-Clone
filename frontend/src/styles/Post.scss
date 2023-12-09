@@ -1,51 +1,291 @@
-.home{
-    pointer-events: none;
- }
+.home {
+  pointer-events: none;
+}
+
 .body-blur {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(42, 41, 41, 0.5);
-    z-index: 1;
-    pointer-events: none; 
-  }
-  .cross-container {
-    width: 5rem;
-    height: 5rem;
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem;
-    position: fixed;
-    top: 0;
-    right: 0; 
-    z-index: 999;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(42, 41, 41, 0.5);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.cross-container {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  cursor: pointer;
+  pointer-events: auto;
+
+  .cross {
+    width: 2rem;
+    height: 2rem;
     cursor: pointer;
-    pointer-events: auto;
-    .cross{
-        width: 2rem;
-        height: 2rem;
-        cursor: pointer;
-        font-size: 2rem;
-        color:white;
+    font-size: 2rem;
+    color: white;
+  }
+}
+
+.post-container {
+  width: 80%;
+  height: 90%;
+  position: fixed;
+  top: 5%;
+  left: 10%;
+  border-radius: 0 0.2rem 0.2rem 0;
+  pointer-events: auto;
+  z-index: 999;
+  display: flex;
+  background-color: white;
+
+  .post-left {
+    width: 60%;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
-  .post {
-    width: 80%;
-    height: 90%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    z-index: 999;
-    overflow-y: auto;
-    pointer-events: auto;
+
+  .post-right {
+    width: 50%;
+    height: 100%;
+
+    .post-right-top {
+      width: 100%;
+      height: 10%;
+      .feed-right-account {
+        width: 100%;
+        height: 100%;
+        display: flex;
+
+        .feed-right-account-img {
+          width: 10%;
+          height: 100%;
+          margin-left: 1rem;
+          margin-top: 0.7rem;
+
+          img {
+            width: 2.5rem;
+            height: 2.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        }
+
+        .feed-right-account-text {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-left: 0.9rem;
+
+          .feed-right-account-username {
+            font-size: 1rem;
+            font-weight: 600;
+            height: 30%;
+            cursor: pointer;
+            margin-top: -1.1rem;
+          }
+        }
+
+        .feed-right-account-switch {
+          width: 20%;
+          height: 80%;
+          margin-left: 15rem;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          justify-content: center;
+
+          span {
+            font-size: 1.4rem;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+
+    .post-right-comments {
+      width: 100%;
+      height: 67%;
+      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgb(13, 13, 13,0.1);
+      border-bottom: 1px solid rgb(13, 13, 13,0.1);
+      .comment{
+        display: flex;
+      .comment-profile {
+        margin-right: 12px;
+        display: flex;
+        margin-left: 1rem;
+        margin-top: 0.5rem;
+        img{
+          width: 2.5rem;
+          cursor: pointer;
+          height: 2.5rem;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      .comment-content {
+        width: 25rem;
+        .comment-header{
+          display: flex;
+          margin-bottom: 4px;
+         span{
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+         }
+         p{
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-left: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+         }
+        }
+      }  
+      .commentlike{
+        display: flex;
+        cursor: pointer;
+        margin-left: 1rem;
+        margin-top: 1.3rem;
+      }    
+      .comment-actions {
+        display: flex;
+        margin-top: -1rem;
+        gap: 16px;
+        font-size: 0.9rem;
+        color: gray;
+        .comment-timestamp {
+          font-size: 0.8rem;
+          color: gray;
+          margin-left: 8px;
+        }
+        .comment-action{
+          cursor: pointer;
+          font-size: 0.8rem;
+          color: gray;
+          font-weight: 610;
+        }
+      }
+    }
+    }
+    .post-right-likes {
+      width: 100%;
+      height: 15%;
+      display: flex;
+      margin-left: 1rem;
+      .cardBottomLeft {
+        display: flex;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        margin-right: 19rem;
+        .icons{
+        margin-bottom: 0.5rem;
+        img {
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+
+        .likeIcon {
+          cursor: pointer;
+          width: 1.7rem;
+          height: 1.7rem;
+          margin-right: 1rem;
+        }
+
+        .cardlikeCounter {
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+      }
+        .cardcap {
+          width: auto;
+
+          .cardCaptionname {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: gray;
+            cursor: pointer;
+          }
+
+          .cardCaption {
+            font-size: 1rem;
+            font-weight: 400;
+            width: 100%;
+            height: 1rem;
+            cursor: pointer;
+          }
+        }
+
+        .cardCaptionComment {
+          font-size: 1rem;
+          font-weight: 300;
+          cursor: pointer;
+          margin-top: 0.5rem;
+        }
+      }
+
+      .cardBottomRight {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-left: 3rem;
+        margin-top: 0.5rem;
+        img {
+          width: 100%;
+          height: 100%;
+          font-weight: 600;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .post-right-addcomments {
+      width: 100%;
+      height: 8%;
+      display: flex;
+      border-top: 1px solid rgb(13, 13, 13,0.1);
+      .post-right-addcomments-img{
+        width: 10%;
+        height: 100%;
+        margin-left: 1rem;
+        margin-top: 0.7rem;
+      }
+      .post-right-addcomments-input{
+        width: 100%;
+        height: 60%;
+        margin-top: 0.7rem;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        input{
+          width: 80%;
+          height: 100%;
+          border: none;
+          outline: none;
+          font-size: 1rem;
+        }
+      }
+    }
   }
-  
-  
+}

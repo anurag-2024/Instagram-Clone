@@ -1,12 +1,23 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Sidebar from '../components/Sidebar/Sidebar'
 import Feed from '../components/Feed/Feed'
 import "../styles/Home.scss"
+import Create from '../components/Create/Create'
 const Home = () => {
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+
+  const openCreateModal = () => {
+    setCreateModalOpen(true);
+  };
+  const closeCreateModal=()=>{  
+    setCreateModalOpen(false);
+  }
+  console.log(isCreateModalOpen);
   return (
-    <div className='homeContainer'>
-      <Sidebar/>
+    <div className={`homeContainer ${isCreateModalOpen &&'disablePointerEvents'}`}>
+      <Sidebar onCreateClick={openCreateModal}/>
       <Feed/>
+      <Create isOpen={isCreateModalOpen} onClose={closeCreateModal} />
     </div>
   )
 }

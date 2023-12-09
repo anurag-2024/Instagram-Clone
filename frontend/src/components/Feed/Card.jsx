@@ -9,7 +9,7 @@ import share from "../../assets/share.png"
 const post = ({post,cardkey}) => {
     const navigate=useNavigate();
     return (
-        <div className="card">
+        <div className="Card">
             <div className="cardWrapper">
                 <div className="cardTop">
                     <div className="cardTopLeft">

@@ -5,7 +5,7 @@ const initialState={
     username: "",
     fullName: "",
     email:"",
-    mobile:"",
+    mobile:""
 }
 export const todoSlice = createSlice({
     name: "todo",
@@ -20,7 +20,6 @@ export const todoSlice = createSlice({
         },
         setMobile:(state,action)=>{
             state.mobile=action.payload.mobile;
-        
         }
     }
 });

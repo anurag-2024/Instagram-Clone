@@ -1,0 +1,24 @@
+.body-blur {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(42, 41, 41, 0.5);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+.create{
+  width: 50%;
+  height: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: auto;
+  z-index: 999;
+  display: flex;
+  background-color: white;
+}

@@ -12,8 +12,9 @@ import More from '../More/More';
 import Search from '../Search/Search';
 import Create from './Create';
 import ProfilePhoto from '../../assets/profile.jpeg';
+import CreatePost from '../Create/Create';
 import { useSelector } from 'react-redux';
-const Sidebar = () => {
+const Sidebar = ({ onCreateClick }) => {
   const navigate = useNavigate();
   const username=useSelector(state=>state.username);
   const [more, setmore] = useState(false);
@@ -48,7 +49,7 @@ const Sidebar = () => {
       <div className='sidebar'>
         <div className='sideWrapper'>
           <div className='logo'>
-            {search?<span className='logoinsta' onClick={()=>{handleClick(0),navigate("/")}}><FaInstagram/></span>:<span onClick={()=>navigate("/")}>Instagram</span>}
+            {search?<span className='logoinsta' onClick={()=>{handleClick(0),navigate("/")}}><FaInstagram className='iconinsta'/></span>:<span onClick={()=>navigate("/")}>Instagram</span>}
           </div>
           <ul className='sideWrapperlistitems'>
               <li className={`sidebarlistItem ${active[0]?"active":""}`} onClick={()=>{handleClick(0),navigate("/")}}>
@@ -78,7 +79,7 @@ const Sidebar = () => {
             </li>
             <li className={`sidebarlistItem ${active[6]?"active":""}`} onClick={()=>handleClick(6)}>
             <Create className="sidebarIcon" />
-            <span className="sidebarlistItemtext">Create</span>
+            <span className="sidebarlistItemtext" onClick={onCreateClick}>Create</span>
             </li>
             <li className={`sidebarlistItem ${active[7]?"active":""}`} onClick={()=>{handleClick(7),navigate(`/${username}`)}}>
             <img width="20" height="20"  className="sidebarIcon" src={ProfilePhoto} alt="profile"/>
