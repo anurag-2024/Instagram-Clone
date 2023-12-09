@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:ital,wght@0,400;0,500;1,300;1,500&display=swap");
+.register {
+    width: 90vw;
+    height: 120vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fafafa;
+  
+    .register__box {
+      display: flex;
+      background-color: #fff;
+      border: 1px solid #e6e6e6;
+      border-radius: 8px;
+      margin-left: 10rem;
+      overflow: hidden;
+      width: 350px;
+    }
+  
+    .register__side {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      .register__form {
+        text-align: center;
+  
+        h1 {
+          font-size: 2.5rem;
+          font-family:'Lobster', sans-serif;
+          margin-bottom: 16px;
+          color: #262626;
+        }
+        p {
+          font-size: 1rem;
+          color: #9b9999;
+          font-weight: 600;
+          margin-bottom: 24px;
+        }
+  
+        .register__facebook {
+          background-color: rgb(0, 149, 246);
+          color: #fff;
+          border: 1px solid #385185;
+          border-radius: 5px;
+          padding: 8px 16px;
+          border: 1px solid rgb(219, 219, 219);
+          margin-bottom: 16px;
+          cursor: pointer;
+          span {
+            font-weight: 600;
+          }
+        }
+  
+        .register__form-or {
+          display: flex;
+          align-items: center;
+          margin-bottom: 16px;
+  
+          .register__form-or-line {
+            flex: 1;
+            height: 1px;
+            background-color: #e6e6e6;
+          }
+  
+          .register__form-or-text {
+            margin: 0 16px;
+            color: #8e8e8e;
+            font-size: 0.85rem;
+          }
+        }
+  
+        form {
+          display: flex;
+          flex-direction: column;
+  
+          .register__form-input {
+            margin-bottom: 16px;
+  
+            input {
+              width: 100%;
+              padding: 0.5rem;
+              border: 1px solid #dbdbdb;
+              border-radius: 3px;
+              font-size: 0.9rem;
+            }
+            &:focus {
+              border: 1px solid #0095f6;
+              border-radius: 3px;
+            }
+            button {
+              width: 100%;
+              padding: 8px;
+              border: none;
+              border-radius: 5px;
+              background-color: #0095f6;
+              border: 1px solid rgb(219, 219, 219);
+              color: #fff;
+              font-size: 0.9rem;
+              cursor: pointer;
+            }
+          }
+  
+          .password {
+            margin-top: 8px;
+          }
+        }
+  
+        .register__terms__before{
+            font-size: 0.8rem;
+            color: #8e8e8e;
+            margin-bottom: 16px;
+            strong {
+              font-weight: 600;
+            }
+        }
+        .register__terms {
+          font-size: 0.8rem;
+          color: #8e8e8e;
+          margin-bottom: 3rem;
+          strong {
+            font-weight: 600;
+          }
+        }
+      }
+  
+      .register__signup {
+        font-size: 0.9rem;
+        color: #262626;
+        margin-bottom: 16px;
+        height: 4rem;
+        span{
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        a {
+          color: #0095f6;
+          font-weight: 600;
+          text-decoration: none;
+        }
+      }
+  
+      .register__get-app {
+        font-size: 0.9rem;
+        color: #424242;
+  
+        span {
+          margin-bottom: 3rem;
+          margin-left: 5rem;
+        }
+        .register__get-app-imgs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+          img {
+            width: 120px;
+            margin-right: 8px;
+            max-height: 2.5rem;
+          }
+        }
+      }
+    }
+  }
+  

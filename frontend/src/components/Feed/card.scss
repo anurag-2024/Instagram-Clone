@@ -1,0 +1,129 @@
+.card {
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  // border: 1px solid #ddd;
+  // border-radius: 8px;
+  overflow: hidden;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .cardWrapper {
+    padding: 16px;
+
+    .cardTop {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .cardTopLeft {
+        display: flex;
+        align-items: center;
+
+        .postProfileImg {
+          width: 32px;
+          height: 32px;
+          cursor: pointer;
+          border-radius: 50%;
+          margin-right: 8px;
+        }
+
+        .cardProfileUsername {
+          font-weight: bold;
+          margin-right: 4px;
+          cursor: pointer;
+        }
+
+        .cardDate {
+          color: #555;
+          margin-right: 4px;
+        }
+
+        .cardFollow {
+          color: #0095f6;
+          cursor: pointer;
+        }
+      }
+
+      .cardTopRight {
+        cursor: pointer;
+
+        svg {
+          font-size: 24px;
+        }
+      }
+    }
+    .cardCenter {
+      img {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        display: block;
+      }
+    }
+    .cardBottom {
+      margin-top: 16px;
+      display: flex;
+
+      .cardBottomLeft {
+        display: flex;
+        flex-direction: column;
+        margin-right: 19rem;
+        
+        img {
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+
+        .likeIcon {
+          cursor: pointer;
+          width: 1.7rem;
+          height: 1.7rem;
+          margin-right: 1rem;
+        }
+
+        .cardlikeCounter {
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-right: 1rem;
+        }
+        .cardcap{
+          width: auto;
+          .cardCaptionname {
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+          }
+  
+          .cardCaption {
+            font-size: 1rem;
+            font-weight: 400;
+            width: 100%;
+            height: 1rem;
+            cursor: pointer;
+          }
+        } 
+        .cardCaptionComment {
+          font-size: 1rem;
+          font-weight: 300;
+          cursor: pointer;
+          margin-top: 0.5rem;
+        }
+      }
+
+      .cardBottomRight {
+        width: 2rem;
+        height: 2rem;
+        margin-right: 1rem;
+
+        img {
+          width: 100%;
+          height: 100%;
+          margin-right: 0rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

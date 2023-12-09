@@ -1,0 +1,50 @@
+.suggestion{
+    width: 100%;
+    height: 8%;
+    display: flex;
+    justify-content: space-between;
+    .suggesstion-box{
+        margin-left: -1.8rem;
+    }
+    .feed-right-suggesstion-list-img{
+        width: 12%;
+        height: 12%;
+        display: flex;
+        margin-right: 1rem;
+            img{
+                width: 100%;
+                cursor: pointer;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+
+            }
+    }
+    .feed-right-suggesstion-list-username{
+        width: 100%;
+        height: 10%;
+        p{
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    }
+    .feed-right-suggesstion-list-followedby{
+        width: 100%;
+        height: 10%;
+        p{
+            font-size: 0.8rem;
+            color: gray;
+        }
+    }
+    .feed-right-suggesstion-list-follow{
+        margin-right: 5rem;
+        p{
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color:  #0095F6;
+            cursor: pointer;
+        }
+    }
+}

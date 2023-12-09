@@ -1,0 +1,75 @@
+.more{
+    width: 16rem;
+    height: 25rem;
+    margin-top: -25rem;
+    background-color:white;
+    border: 2px solid rgb(189, 189, 188);
+    border-radius: 0.9rem;
+    box-shadow: 1px 0px 14px 5px rgba(152,146,146,0.13);
+-webkit-box-shadow: 1px 0px 14px 5px rgba(152,146,146,0.13);
+-moz-box-shadow: 1px 0px 14px 5px rgba(152,146,146,0.13);
+    .more-up
+    {
+        width: 100%;
+        height: 15rem;
+        gap: 0.3rem;
+        display: flex;
+        flex-direction:column ;
+        .more-upone{
+            width: 100%;
+            height: 3rem;
+            display: flex;
+            cursor: pointer;
+            .logo{
+                width: 1.5rem;
+                height: 2.5rem;
+                font-weight: 100;
+                align-items: center;
+               justify-content: center;
+               .logoitem{
+                     width: 2rem;
+                     height: 2rem;
+                     margin-top: -1.5rem;
+               }
+                img{
+                    margin-top: -1.5rem;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                }
+            }
+            .text{
+                font-size: 0.9rem;
+                font-weight: 350;
+                margin-left: 1rem;
+                margin-top: 1rem;
+               align-items: center;
+                 justify-content: center;
+            }
+        }
+    }
+    .more-down
+    {
+        width: 100%;
+        height: 10rem;
+        margin-top: 4rem;
+        display:flex;
+        flex-direction:column;
+        .switchaccounts{
+            width: 100%;
+            height: 3rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            span{
+                margin-left: 2rem;
+            }
+        }
+        .logout{
+            width: 100%;
+            height: 3rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+    }
+}

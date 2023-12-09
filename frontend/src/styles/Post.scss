@@ -1,0 +1,51 @@
+.home{
+    pointer-events: none;
+ }
+.body-blur {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(42, 41, 41, 0.5);
+    z-index: 1;
+    pointer-events: none; 
+  }
+  .cross-container {
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    right: 0; 
+    z-index: 999;
+    cursor: pointer;
+    pointer-events: auto;
+    .cross{
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+        font-size: 2rem;
+        color:white;
+    }
+  }
+  .post {
+    width: 80%;
+    height: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    z-index: 999;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+  
+  
