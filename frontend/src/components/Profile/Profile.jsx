@@ -3,7 +3,7 @@ import './profile.scss';
 import { cards } from "../Feed/images"
 import { IoIosSettings } from "react-icons/io";
 import camera from "../../../src/assets/camera.png";
-import img02 from "../../assets/profileimages/img02.jpg";
+import img01 from "../../assets/profileimages/img01.jpg";
 const Profile = () => {
     const year = new Date().getFullYear();
     const [active, setactive] = useState([true, false, false]);
@@ -27,7 +27,7 @@ const Profile = () => {
                     <div className='profile-wrapper'>
                         <div className='profile-wrapper-up'>
                             <div className='profile-photo'>
-                                <img src={img02} alt='profile' />
+                                <img src={img01} alt='profile' />
                             </div>
                             <div className='profile-desc'>
                                 <div className='profile-desc-up'>
@@ -66,7 +66,7 @@ const Profile = () => {
                             <div className='highlights'>
                                 <div className='highlight'>
                                     <div className='hightlight-photo'>
-                                        <div className='hightlight-photo-circle'><img src={img02} alt='profile' /></div>
+                                        <div className='hightlight-photo-circle'><img src={img01} alt='profile' /></div>
                                     </div>
                                     <div className='highlight-name'>
                                         <span>Highlights</span>
@@ -74,7 +74,7 @@ const Profile = () => {
                                 </div>
                                 <div className='highlight'>
                                     <div className='hightlight-photo'>
-                                        <div className='hightlight-photo-circle'><img src={img02} alt='profile' /></div>
+                                        <div className='hightlight-photo-circle'><img src={img01} alt='profile' /></div>
                                     </div>
                                     <div className='highlight-name'>
                                         <span>Highlights</span>
@@ -82,7 +82,7 @@ const Profile = () => {
                                 </div>
                                 <div className='highlight'>
                                     <div className='hightlight-photo'>
-                                        <div className='hightlight-photo-circle'><img src={img02} alt='profile' /></div>
+                                        <div className='hightlight-photo-circle'><img src={img01} alt='profile' /></div>
                                     </div>
                                     <div className='highlight-name'>
                                         <span>Highlights</span>
@@ -90,7 +90,7 @@ const Profile = () => {
                                 </div>
                                 <div className='highlight'>
                                     <div className='hightlight-photo'>
-                                        <div className='hightlight-photo-circle'><img src={img02} alt='profile' /></div>
+                                        <div className='hightlight-photo-circle'><img src={img01} alt='profile' /></div>
                                     </div>
                                     <div className='highlight-name'>
                                         <span>Highlights</span>

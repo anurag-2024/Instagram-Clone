@@ -1,15 +1,18 @@
 // CreateModal.js
 import React, { useEffect, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
+import img01 from "../../assets/profileimages/img01.jpg";
+import { useSelector } from 'react-redux';
 const Create = ({ isOpen, onClose }) => {
-    console.log("create", isOpen);
+    const username = useSelector((state) => state.username);
     const [uploadedImage, setUploadedImage] = useState(null);
     const [base64Image, setBase64Image] = useState(null);
-
+    const [charcount, setCharcount] = useState(0);
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
+            console.log(reader);
             reader.onloadend = () => {
                 setUploadedImage(file);
                 setBase64Image(reader.result);
@@ -17,8 +20,6 @@ const Create = ({ isOpen, onClose }) => {
             reader.readAsDataURL(file);
         }
     };
-    console.log(uploadedImage);
-    console.log(base64Image);
     useEffect(() => {
         if (!isOpen) return;
         document.body.style.overflow = 'hidden';
@@ -26,24 +27,61 @@ const Create = ({ isOpen, onClose }) => {
             document.body.style.overflow = 'auto';
         };
     }, [isOpen]);
+
+    const handleClose = () => {
+        setUploadedImage(null);
+        setBase64Image(null);
+        onClose();
+    }
     return (
         <>
             {isOpen &&
                 (
                     <>
                         <div className='body-blur'></div>
-                        <div className='cross-container' onClick={onClose}>
+                        <div className='cross-container' onClick={handleClose}>
                             <RxCross2 className='cross' />
                         </div>
-                        {uploadedImage?(
-                            <div className='create'>
-                        <img src={base64Image} alt="Uploaded" />
-                        <div className='caption-section'>
-                            <input type='text' placeholder='Write a caption...' />
-                            <button>Share</button>
-                        </div>
-                        </div>
-                        ):(<div className='create'>
+                        {uploadedImage ? (
+                            <div className='upload'>
+                                <div className='upload-head'>
+                                    <span>Create New Post</span>
+                                    <button>Share</button>
+                                </div>
+                                <div className='upload-down'>
+                                    <div className='upload-left'>
+                                        <img src={base64Image} alt='uploaded' />
+                                    </div>
+                                    <div className='upload-right'>
+                                        <div className='upload-right-top'>
+                                            <div className='feed-right-account'>
+                                                <div className='feed-right-account-img'>
+                                                    <img src={img01} alt='' />
+                                                </div>
+                                                <div className='feed-right-account-text'>
+                                                    <div className='feed-right-account-username'>
+                                                        <p>{username}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='upload-right-middle'>
+                                            <textarea onChange={(e)=>setCharcount(e.target.value.length)}/>
+                                        </div>
+                                        <div className='upload-right-bottom'>
+                                            <div className='upload-right-bottom-icons'>
+                                            <div className='upload-right-bottom-img'>
+                                                <svg aria-label="Emoji" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Emoji</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
+                                            </div>
+                                            <div className='charcount'>
+                                                <span>{charcount}/2200</span>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (<div className='create'>
                             <div className='create-head'>
                                 <span>Create New Post</span>
                             </div>
