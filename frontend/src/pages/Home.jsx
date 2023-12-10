@@ -12,7 +12,6 @@ const Home = () => {
   const closeCreateModal=()=>{  
     setCreateModalOpen(false);
   }
-  console.log(isCreateModalOpen);
   return (
     <div className={`homeContainer ${isCreateModalOpen &&'disablePointerEvents'}`}>
       <Sidebar onCreateClick={openCreateModal}/>
