@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import "../styles/Post.scss";
 import Home from './Home.jsx';
 import p01 from "../assets/feedimages/p09.jpg";
@@ -9,6 +9,7 @@ import { BsThreeDots } from "react-icons/bs";
 import share from "../assets/share.png";
 import save from "../assets/save.png";
 import { GoHeart } from "react-icons/go";
+import { FaHeart } from "react-icons/fa6";
 import { FaRegComment } from "react-icons/fa";
 import Comment from '../components/Comment/Comment.jsx';
 import { useSelector } from 'react-redux';
@@ -21,6 +22,33 @@ const Post = () => {
       document.body.style.overflow = 'auto';
     };
   }, []);
+  const [like,setLike]=useState(false);
+  const [likeCount,setLikeCount]=useState(123);
+  const [hide,setHide]=useState(true);
+  useEffect(()=>{
+      if(!hide){
+          setTimeout(() => {
+              setHide(true);
+          }, 800);
+      }
+  },[hide])
+  const handleDoubleClick=()=>{
+      setLike(true);
+      setHide(false);
+      if(!like){
+          setLikeCount(likeCount+1);
+      }
+  }
+  const handleClick=()=>{
+      setLike(!like);
+      if(!like){
+          setLikeCount(likeCount+1);
+      }
+      else{
+          setLikeCount(likeCount-1);
+      }
+  }
+
   return (
     <>
       <div className='home'>
@@ -32,7 +60,8 @@ const Post = () => {
       <div className='body-blur'></div>
       <div className='post-container'>
         <div className='post-left'>
-          <img src={p01} alt=''></img>
+        <svg className={hide?"likedimg" :"likedimg hide"} aria-label="Like" viewBox="0 0 48 48" width="128"><defs><linearGradient gradientTransform="rotate(35)" id="ig_heart_gradient"><stop offset="0%" stop-color="#FF7A00"></stop><stop offset="40%" stop-color="#FF0169"></stop><stop offset="100%" stop-color="#D300C5"></stop></linearGradient></defs><path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z" fill="url(#ig_heart_gradient)"></path></svg>
+          <img src={p01} alt='' onDoubleClick={handleDoubleClick}/>
         </div>
         <div className='post-right'>
           <div className='post-right-top'>
@@ -85,12 +114,12 @@ const Post = () => {
           <div className='post-right-likes'>
             <div className="cardBottomLeft">
               <div className='icons'>
-                <GoHeart className="likeIcon" />
+              {like?<FaHeart className="likeIcon liked" onClick={handleClick} />:<GoHeart className="likeIcon" onClick={handleClick} />}
                 <FaRegComment className="likeIcon" />
                 <img src={share} alt="" className="likeIcon" />
               </div>
               <div>
-                <span className="cardlikeCounter">123 likes</span>
+                <span className="cardlikeCounter">{likeCount} likes</span>
               </div>
               <div className='cardcap'>
                 <span className="cardCaptionname">2 minutes ago</span>

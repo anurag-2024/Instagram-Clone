@@ -10,6 +10,7 @@ import OTP from './pages/OTP';
 import Post from './pages/Post';
 import Story from './pages/Story';
 import Cookies from 'js-cookie';
+import Settings from './pages/Settings';
 import { Navigate } from 'react-router';
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/:username" element={<UserProfile/>} />
           <Route path="/p/:postId" element={<Post/>} />
           <Route path="/stories/:username/:storyId" element={<Story/>} />
+          <Route path="/accounts/edit" element={<Settings/>}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -10,16 +10,23 @@
 -moz-box-shadow: 1px 0px 14px 5px rgba(152,146,146,0.13);
     .more-up
     {
-        width: 100%;
+        width: 95%;
         height: 15rem;
         gap: 0.3rem;
+        padding-top: 0.3rem;
         display: flex;
+        margin-left: 0.5rem;
+        margin-right: -0.5rem;
         flex-direction:column ;
         .more-upone{
             width: 100%;
             height: 3rem;
             display: flex;
             cursor: pointer;
+            &:hover{
+                border-radius: 0.5rem;
+                background-color: rgb(208, 206, 206,0.3);
+            }
             .logo{
                 width: 1.5rem;
                 height: 2.5rem;

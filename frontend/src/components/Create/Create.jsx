@@ -66,7 +66,7 @@ const Create = ({ isOpen, onClose }) => {
                                             </div>
                                         </div>
                                         <div className='upload-right-middle'>
-                                            <textarea onChange={(e)=>setCharcount(e.target.value.length)}/>
+                                            <textarea maxLength="2200" onChange={(e)=>setCharcount(e.target.value.length)}/>
                                         </div>
                                         <div className='upload-right-bottom'>
                                             <div className='upload-right-bottom-icons'>

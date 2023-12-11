@@ -17,7 +17,7 @@ const More = () => {
         <>
             <div className='more'>
                 <div className='more-up'>
-                    <div className='more-upone'>
+                    <div className='more-upone' onClick={()=>navigate("/accounts/edit")}>
 
                         <div className='logo'> <IoIosSettings className='logoitem' /></div>
                         <span className='text'>Settings</span>
