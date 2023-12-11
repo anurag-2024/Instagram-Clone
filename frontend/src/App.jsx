@@ -34,7 +34,7 @@ function App() {
           <Route path="/otp" element={<OTP/>} />
           <Route path="/:username" element={<UserProfile/>} />
           <Route path="/p/:postId" element={<Post/>} />
-          <Route path="/stories/:storyId" element={<Story/>} />
+          <Route path="/stories/:username/:storyId" element={<Story/>} />
         </Routes>
       </BrowserRouter>
     </>

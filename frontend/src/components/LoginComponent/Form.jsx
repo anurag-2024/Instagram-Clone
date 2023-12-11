@@ -27,7 +27,7 @@ const form = () => {
             const res=await axios.post(`${BASE_URL}/login`, { username:username, password:formik.values.password, email:email ,mobile:mobile });
             if(res?.status===200){
                 console.log(res?.data);
-                Cookies.set('token', res?.data?.token, { expires: 24*60*60*1000 });
+                Cookies.set('token', res?.data?.token, { expires: 2*24*60*60*1000 });
                 toast.success("Logged In Successfully!",{id:loadingToast});
                 navigate("/");
             }   
