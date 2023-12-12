@@ -1,0 +1,184 @@
+.settings-left {
+    width: 27%;
+    height: 100%;
+
+    .settings-left-container {
+        width: 90%;
+        height: 95vh;
+        margin: 5%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        .settings-left-header {
+            width: 90%;
+            min-height: 35vh;
+            margin-bottom: 1.5rem;
+            display: flex;
+            margin-left: 0.5rem;
+            flex-direction: column;
+            border-radius: 1.3rem;
+            box-shadow: 0 0 24px 0 rgba(0, 0, 0, .08);
+
+            &:hover {
+                background-color: rgba(146, 145, 145, 0.1);
+                cursor: pointer;
+            }
+
+            .meta {
+                width: 100%;
+                height: 10%;
+                margin-top: 0.8rem;
+                margin-left: 1rem;
+
+                svg {
+                    color: royalblue;
+                    width: 1.2rem;
+                    height: 1.2rem;
+                }
+
+                span {
+                    font-size: 1rem;
+                    font-weight: 620;
+                    margin-left: 0.1rem;
+                }
+            }
+
+            .account-center {
+                width: 100%;
+                height: 10%;
+                display: flex;
+                margin-left: 1rem;
+                margin-bottom: 0.5rem;
+                align-items: center;
+
+                span {
+                    font-size: 1.1rem;
+                    font-weight: 650;
+                }
+            }
+
+            .account-p {
+                width: 100%;
+                height: 10%;
+                display: flex;
+                margin-top: 1rem;
+                align-items: center;
+                margin-left: 1rem;
+
+                p {
+                    font-size: 0.8rem;
+                    font-weight: 400;
+                    opacity: 0.8;
+                }
+            }
+
+            .account-content {
+                width: 100%;
+                height: 40%;
+                margin-left: 1rem;
+                display: flex;
+                gap: 0.5rem;
+                flex-direction: column;
+                justify-content: space-evenly;
+
+                .account-content-1 {
+                    width: 100%;
+                    height: 10%;
+                    display: flex;
+                    gap: 0.5rem;
+                    align-items: center;
+
+                    svg {
+                        width: 1.2rem;
+                        height: 1.2rem;
+                        opacity: 0.8;
+                    }
+
+                    span {
+                        margin-left: 0.5rem;
+                        font-size: 0.8rem;
+                        font-weight: 400;
+                        opacity: 0.8;
+                    }
+                }
+            }
+
+            .account-below {
+                width: 100%;
+                height: 20%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                margin-left: 1.3rem;
+
+                span {
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    color: #0095F6;
+                }
+            }
+        }
+
+        .settings-left-heading {
+            width: 100%;
+            min-height: 6vh;
+            align-items: center;
+            margin-left: 2.5rem;
+
+            span {
+                font-size: 1.3rem;
+                font-weight: 650;
+            }
+        }
+
+        .setting-left-1 {
+            width: 85%;
+            min-height: 7vh;
+            display: flex;
+            align-items: center;
+            margin-left: 0.8rem;
+            margin-bottom: 0.1rem;
+            border-radius: 0.5rem;
+
+            &:hover {
+                background-color: rgba(105, 103, 103, 0.1);
+                cursor: pointer;
+            }
+
+            span {
+                font-size: 0.9rem;
+                font-weight: 450;
+                margin-left: 1.5rem;
+            }
+        }
+
+        .active {
+            background-color: rgba(17, 17, 17, 0.1);
+
+            &:hover {
+                background-color: rgb(217, 216, 216);
+                cursor: pointer;
+            }
+        }
+
+        .settings-left-footer {
+            width: 100%;
+            height: 10%;
+            display: flex;
+            margin-left: 2.2rem;
+            margin-top: 0.8rem;
+            margin-bottom: 1rem;
+            align-items: center;
+            cursor: pointer;
+
+            span {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #0095F6;
+            }
+        }
+    }
+}

@@ -1,13 +1,17 @@
-// CreateModal.js
 import React, { useEffect, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import img01 from "../../assets/profileimages/img01.jpg";
 import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+import {jwtDecode} from 'jwt-decode';
+import axios from 'axios';
+import {BASE_URL} from '../../utilis/config';
 const Create = ({ isOpen, onClose }) => {
     const username = useSelector((state) => state.username);
     const [uploadedImage, setUploadedImage] = useState(null);
     const [base64Image, setBase64Image] = useState(null);
     const [charcount, setCharcount] = useState(0);
+    const [caption, setCaption] = useState('');
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -33,6 +37,48 @@ const Create = ({ isOpen, onClose }) => {
         setBase64Image(null);
         onClose();
     }
+    const handleChange = (e) => {
+        setCharcount(e.target.value.length);
+        setCaption(e.target.value);
+    }
+    const token=Cookies.get('token');
+    const decoded=jwtDecode(token);
+    const userId=decoded.userId;  
+    const getBase64Image = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    };
+    const handleSubmit = async () => {
+        try{
+           const data={
+                caption:caption,
+                userId,
+                image:base64Image,
+                profile: await getBase64Image(img01),
+                username:username,
+           }
+              const res=await axios.post(`${BASE_URL}/create`,data,{
+                headers:{
+                    authorization:`Bearer ${token}`
+                },
+                "Content-type":"Application/json"
+              });
+              if(res.status===200){
+                console.log("Post Created");
+                console.log(res);
+                handleClose();
+              }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     return (
         <>
             {isOpen &&
@@ -46,7 +92,7 @@ const Create = ({ isOpen, onClose }) => {
                             <div className='upload'>
                                 <div className='upload-head'>
                                     <span>Create New Post</span>
-                                    <button>Share</button>
+                                    <button onClick={handleSubmit}>Share</button>
                                 </div>
                                 <div className='upload-down'>
                                     <div className='upload-left'>
@@ -66,7 +112,7 @@ const Create = ({ isOpen, onClose }) => {
                                             </div>
                                         </div>
                                         <div className='upload-right-middle'>
-                                            <textarea maxLength="2200" onChange={(e)=>setCharcount(e.target.value.length)}/>
+                                            <textarea maxLength="2200" onChange={(e)=>handleChange(e)}/>
                                         </div>
                                         <div className='upload-right-bottom'>
                                             <div className='upload-right-bottom-icons'>
@@ -74,7 +120,7 @@ const Create = ({ isOpen, onClose }) => {
                                                 <svg aria-label="Emoji" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Emoji</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
                                             </div>
                                             <div className='charcount'>
-                                                <span>{charcount}/2200</span>
+                                                <span>{charcount}/2,200</span>
                                             </div>
                                             </div>
                                         </div>
@@ -98,7 +144,6 @@ const Create = ({ isOpen, onClose }) => {
                                 </div>
                             </div>
                         </div>)}
-
                     </>
                 )
             }
