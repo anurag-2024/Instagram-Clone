@@ -26,7 +26,16 @@ const userSchema = new mongoose.Schema(
     profile: {
       type: String,
     },
-    bio:{type:String},
+    bio:{
+      type:String
+    },
+    gender:{
+      type:String
+    },
+    post:{
+      type:Array,
+      default:[],
+    },
     role: {
       type: String,
       default: "user",
