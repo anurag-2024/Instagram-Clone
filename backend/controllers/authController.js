@@ -57,7 +57,9 @@ export const register = async (req, res) => {
                         mobile: req.body.mobile,
                         password: password
                     });
+                    console.log(newUser);
                     const user = await newUser.save();
+                    console.log(newUser);
                     return res.status(201).json({
                         success: true,
                         message: "User created successfully",

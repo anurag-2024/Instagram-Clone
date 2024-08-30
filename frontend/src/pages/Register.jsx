@@ -32,7 +32,7 @@ const Register = () => {
             }
         }
         catch(err){
-            toast.error(err?.response?.data?.message,{id:loadingToast});
+            toast.error("Internal Server Error",{id:loadingToast});
             console.error("Error during registration:", err);
         }
     }
