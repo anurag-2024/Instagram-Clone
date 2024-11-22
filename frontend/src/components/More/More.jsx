@@ -33,7 +33,7 @@ const More = ({ onClose }) => {
     }
 
     return (
-        <div ref={moreRef} className="absolute bottom-16 left-4 w-[265px] bg-white rounded-xl border border-gray-300 shadow-md">
+        <div ref={moreRef} className="absolute bottom-16 left-4 w-[265px] bg-white rounded-xl border border-gray-300 shadow-md z-[100]">
             <div className="flex flex-col p-2 space-y-1">
                 <div className="flex items-center p-3 hover:bg-gray-100 rounded-lg cursor-pointer" onClick={() => navigate("/accounts/edit")}>
                     <IoIosSettings className="w-6 h-6" />
