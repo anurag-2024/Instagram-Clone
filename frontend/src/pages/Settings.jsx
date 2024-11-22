@@ -3,9 +3,17 @@ import "../styles/Settings.scss"
 import SettingComponent from '../components/SettingComponent/SettingComponent';
 import img01 from "../assets/profileimages/img01.jpg";
 import Sidebar from '../components/Sidebar/Sidebar'
+import Create from '../components/Create/Create';
 import Footer from "../components/Profile/Profile-Footer"
 const Settings = () => {
     const [biocount, setbiocount] = useState(0);
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+    const openCreateModal = () => {
+        setCreateModalOpen(true);
+    };
+    const closeCreateModal=()=>{  
+        setCreateModalOpen(false);
+    }
     const [active, setactive] = useState([true, false, false, false, false, false, false, false, false, false]);
     const handleClick = (index) => {
         let temp = [true, false, false, false, false, false, false, false, false, false];
@@ -21,7 +29,7 @@ const Settings = () => {
     }
     return (
         <>
-            <Sidebar />
+            <Sidebar onCreateClick={openCreateModal}/>
             <div className='settings'>
                 <SettingComponent active={active} handleClick={handleClick} />
                 <div className="settings-right">
@@ -70,6 +78,7 @@ const Settings = () => {
                     <Footer />
                 </div>
             </div>
+            <Create isOpen={isCreateModalOpen} onClose={closeCreateModal} />
         </>
     )
 }

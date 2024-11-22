@@ -27,23 +27,30 @@ const Carousel = () => {
 
   return (
     <>
-      {images.map((img, index) => {
-        return (
-          <div className='story'>
-            <div className='stories-img'>
-              <div
-                className={`story-circle ${seen[index] ? 'borderColor-white' : ''}`}
-                onClick={() => handleClick(index)}
-              >
-                <img src={img} alt='' />
+      {images.map((img, index) => (
+        <div key={index} className="flex-shrink-0 mr-2">
+          <div className="flex flex-col items-center space-y-1">
+            <button 
+              className={`w-16 h-16 rounded-full p-[2px] cursor-pointer
+                ${seen[index] 
+                  ? 'bg-gray-200' 
+                  : 'bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500'}`}
+              onClick={() => handleClick(index)}
+            >
+              <div className="w-full h-full rounded-full p-[2px] bg-white">
+                <img 
+                  src={img} 
+                  alt="" 
+                  className="w-full h-full rounded-full object-cover"
+                />
               </div>
-            </div>
-            <div className='stories-text'>
-              <p>username01</p>
-            </div>
+            </button>
+            <span className="text-xs text-gray-600 truncate w-16 text-center">
+              username{index + 1}
+            </span>
           </div>
-        );
-      })}
+        </div>
+      ))}
     </>
   );
 };

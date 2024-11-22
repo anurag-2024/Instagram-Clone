@@ -11,20 +11,13 @@ const commentSchema = new mongoose.Schema({
         ref: "Post",
         required: true,
     },
-    username: {
-        type: String,
-        required: true,
-    },
-    profile: {
-        type: String,
-        required: true,
-    },
     comment: {
         type: String,
         required: true,
     },
     likes: {
-        type: Array,
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "User",
         default: [],
     }
 },

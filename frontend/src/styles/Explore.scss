@@ -23,16 +23,57 @@
         flex-wrap: wrap;
 
         .exploreGridItem {
+          position: relative;
           width: 20rem;
           height: 20rem;
           margin: 0.2rem;
           display: flex;
 
-          img {
+          .imageContainer {
+            position: relative;
             width: 100%;
             height: 100%;
-            cursor: pointer;
-            object-fit: cover;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .overlay {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              opacity: 0;
+              transition: opacity 0.3s ease;
+
+              &:hover {
+                opacity: 1;
+              }
+
+              .stats {
+                display: flex;
+                gap: 20px;
+                color: white;
+                font-weight: bold;
+
+                span {
+                  display: flex;
+                  align-items: center;
+                  gap: 5px;
+                }
+
+                i {
+                  font-size: 18px;
+                }
+              }
+            }
           }
         }
       }

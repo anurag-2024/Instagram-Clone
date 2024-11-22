@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './profile.scss';
 import Footer from "./Profile-Footer"
 import { cards } from "../Feed/images"
 import { IoIosSettings } from "react-icons/io";
 import camera from "../../../src/assets/camera.png";
 import img01 from "../../assets/profileimages/img01.jpg";
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import {IoHeartOutline} from "react-icons/io5";
+import {IoChatbubbleOutline} from "react-icons/io5";
+import { getUserPosts, clearUserPosts } from '../../Store/slices/postSlice';
+import { Skeleton } from '@mui/material';
+
 const Profile = () => {
     const [active, setactive] = useState([true, false, false]);
+    const { id } = useParams();
+    const dispatch = useDispatch();
+    const navigate=useNavigate();
+    const { userPosts, userPostsLoading } = useSelector(state => state?.post);
+    console.log(userPosts);
+    useEffect(() => {
+        if (id) {
+            dispatch(getUserPosts(id));
+        }
+        return () => {
+            dispatch(clearUserPosts());
+        };
+    }, [dispatch, id]);
     const handleClick = (index) => {
         let temp = [true, false, false];
         if (index !== 0) {
@@ -18,7 +39,6 @@ const Profile = () => {
             temp[0] = true;
             setactive(temp);
         }
-        console.log(active);
     }
     return (
         <>
@@ -125,13 +145,52 @@ const Profile = () => {
                     </div>
                     <div className='profile-down-posts'>
                         {active[0] && <div className='profile-down-posts-grid'>
-                            {cards.map((card) => {
-                                return (
-                                    <div className="profile-down-posts-grid-item">
-                                        <img src={card} alt="explore" />
+                            {userPostsLoading ? (
+                                Array(6).fill(0).map((_, index) => (
+                                    <div key={index} className="profile-down-posts-grid-item">
+                                        <Skeleton
+                                            variant="rectangular"
+                                            animation="wave"
+                                            width="100%"
+                                            height="100%"
+                                            sx={{
+                                                aspectRatio: '1/1',
+                                                backgroundColor: '#D1CBCB',
+                                                '&::after': {
+                                                    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)'
+                                                }
+                                            }}
+                                        />
                                     </div>
-                                )
-                            })}
+                                ))
+                            ) : (
+                                userPosts.length > 0 ? userPosts.map((post) => (
+                                    <div key={post.id} className="profile-down-posts-grid-item" onClick={()=>navigate(`/p/${post._id}`)} >
+                                        <img src={post?.image} alt="explore" />
+                                        <div className="overlay">
+                                            <div className="stats">
+                                                <span>
+                                                    <IoHeartOutline /> 
+                                                    {post?.likes?.length || 0}
+                                                </span>
+                                                <span>
+                                                    <IoChatbubbleOutline /> 
+                                                    {post?.comments?.length || 0}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )) : <>
+                                    <div className='saved'>
+                                        <div className='saved-photo'>
+                                            <img src={camera} alt='camera' />
+                                        </div>
+                                        <div className='saved-text'>
+                                            <span>No Posts Yet</span>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                         </div>}
                         {active[1] &&
                             <div className='saved'>
@@ -153,7 +212,7 @@ const Profile = () => {
                             </div>
                         }
                     </div>
-                    <Footer/>
+                    <Footer />
                 </div>
             </div>
         </>

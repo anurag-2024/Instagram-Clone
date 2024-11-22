@@ -54,7 +54,7 @@ export const register = async (req, res) => {
                         username: req.body.username,
                         fullName: req.body.fullName,
                         email: req.body.email,
-                        mobile: req.body.mobile,
+                        mobile: req.body.mobile || undefined,
                         password: password
                     });
                     console.log(newUser);
@@ -104,11 +104,12 @@ export const login = async (req, res) => {
                             email: user.email,
                             role: user.role
                         }, process.env.JWT_SECRET, { expiresIn: "1d" });
+                        
                         return res.status(200).json({
                             success: true,
                             message: "Logged in successfully",
-                            data: others,
-                            token: token
+                            user: others,
+                            token: token,
                         })
                     })
                     .catch((err) => {

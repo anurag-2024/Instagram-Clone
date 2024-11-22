@@ -1,49 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import img01 from "../../assets/profileimages/img01.jpg";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import {jwtDecode} from 'jwt-decode';
-import axios from 'axios';
-import {BASE_URL} from '../../utilis/config';
+import { jwtDecode } from 'jwt-decode';
+import { createPost,getAllPosts } from '../../Store/slices/postSlice';
+import toast, { Toaster } from 'react-hot-toast';
+import EmojiPicker from 'emoji-picker-react';
+
 const Create = ({ isOpen, onClose }) => {
-    const username = useSelector((state) => state.username);
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector(state => state.post || {});
+    const user = useSelector((state) => state.auth?.user);
+    const username = user?.username;
     const [uploadedImage, setUploadedImage] = useState(null);
     const [base64Image, setBase64Image] = useState(null);
     const [charcount, setCharcount] = useState(0);
-    const [caption, setCaption] = useState('');
+    const [caption, setCaption] = useState(''); 
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        
+        if (file && allowedTypes.includes(file.type)) {
             const reader = new FileReader();
-            console.log(reader);
             reader.onloadend = () => {
                 setUploadedImage(file);
                 setBase64Image(reader.result);
             };
             reader.readAsDataURL(file);
+        } else {
+            toast.error('Please upload only JPG, PNG, JPEG, or GIF images');
         }
     };
-    useEffect(() => {
-        if (!isOpen) return;
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, [isOpen]);
 
     const handleClose = () => {
         setUploadedImage(null);
         setBase64Image(null);
+        setCaption('');
+        setCharcount(0);
         onClose();
-    }
+    };
+
     const handleChange = (e) => {
         setCharcount(e.target.value.length);
         setCaption(e.target.value);
-    }
-    const token=Cookies.get('token');
-    const decoded=jwtDecode(token);
-    const userId=decoded.userId;  
+    };
+
     const getBase64Image = async (url) => {
         const response = await fetch(url);
         const blob = await response.blob();
@@ -54,80 +58,156 @@ const Create = ({ isOpen, onClose }) => {
             reader.readAsDataURL(blob);
         });
     };
+
     const handleSubmit = async () => {
-        try{
-           const data={
-                caption:caption,
+        const loadingToast = toast.loading('Creating post...');
+        try {
+            const token = Cookies.get('token');
+            const decoded = jwtDecode(token);
+            const userId = decoded.userId;
+
+            const data = {
+                caption,
                 userId,
-                image:base64Image,
-                profile: await getBase64Image(img01),
-                username:username,
-           }
-              const res=await axios.post(`${BASE_URL}/create`,data,{
-                headers:{
-                    authorization:`Bearer ${token}`
-                },
-                "Content-type":"Application/json"
-              });
-              if(res.status===200){
-                console.log("Post Created");
-                console.log(res);
+                image: base64Image,
+            };
+            console.log(data);
+            await dispatch(createPost(data)).unwrap();
+            dispatch(getAllPosts({page: 1, limit: 10}));
+            window.scrollTo(0,0);
+            toast.dismiss(loadingToast);
+            toast.success('Post created successfully!');
+            setShowEmojiPicker(false);
+            setTimeout(() => {
                 handleClose();
-              }
+            }, 800);    
+        } catch (err) {
+            toast.dismiss(loadingToast);
+            toast.error(err.message || 'Failed to create post');
+            console.error(err);
         }
-        catch(err){
-            console.log(err);
+    };
+
+    const onEmojiClick = (emojiObject) => {
+        const newCaption = caption + emojiObject.emoji;
+        setCaption(newCaption);
+        setCharcount(newCaption.length);
+    };
+
+    useEffect(() => {
+        if (!isOpen) return;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
+    }, [isOpen]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            const createElement = document.querySelector('.create');
+            const uploadElement = document.querySelector('.upload');
+            const targetElement = createElement || uploadElement;
+
+            if (targetElement && !targetElement.contains(event.target) && 
+                !event.target.closest('.body-blur') && 
+                !event.target.closest('.cross-container')) {
+                handleClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
         }
-    }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
+
     return (
         <>
-            {isOpen &&
-                (
-                    <>
-                        <div className='body-blur'></div>
-                        <div className='cross-container' onClick={handleClose}>
-                            <RxCross2 className='cross' />
-                        </div>
-                        {uploadedImage ? (
-                            <div className='upload'>
-                                <div className='upload-head'>
-                                    <span>Create New Post</span>
-                                    <button onClick={handleSubmit}>Share</button>
+            {isOpen && (
+                <>
+                    <Toaster position='top-center' reverseOrder={false} />
+                    <div className='body-blur'></div>
+                    <div className='cross-container' onClick={handleClose}>
+                        <RxCross2 className='cross' />
+                    </div>
+                    {uploadedImage ? (
+                        <div className='upload'>
+                            <div className='upload-head flex justify-between items-center'>
+                                <span>Create New Post</span>
+                                <button 
+                                    onClick={handleSubmit} 
+                                    disabled={loading} 
+                                    className={`p-1 m-1 px-2 py-1 rounded-md bg-blue-500 text-white flex items-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                                >
+                                    {loading && (
+                                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                    )}
+                                    {loading ? 'Sharing...' : 'Share'}
+                                </button>
+                            </div>
+                            <div className='upload-down'>
+                                <div className='upload-left'>
+                                    <img src={base64Image} alt='uploaded' />
                                 </div>
-                                <div className='upload-down'>
-                                    <div className='upload-left'>
-                                        <img src={base64Image} alt='uploaded' />
-                                    </div>
-                                    <div className='upload-right'>
-                                        <div className='upload-right-top'>
-                                            <div className='feed-right-account'>
-                                                <div className='feed-right-account-img'>
-                                                    <img src={img01} alt='' />
-                                                </div>
-                                                <div className='feed-right-account-text'>
-                                                    <div className='feed-right-account-username'>
-                                                        <p>{username}</p>
-                                                    </div>
+                                <div className='upload-right'>
+                                    <div className='upload-right-top'>
+                                        <div className='feed-right-account'>
+                                            <div className='feed-right-account-img'>
+                                                <img src={img01} alt='' />
+                                            </div>
+                                            <div className='feed-right-account-text'>
+                                                <div className='feed-right-account-username'>
+                                                    <p>{username}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='upload-right-middle'>
-                                            <textarea maxLength="2200" onChange={(e)=>handleChange(e)}/>
-                                        </div>
-                                        <div className='upload-right-bottom'>
-                                            <div className='upload-right-bottom-icons'>
-                                            <div className='upload-right-bottom-img'>
-                                                <svg aria-label="Emoji" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Emoji</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
+                                    </div>
+                                    <div className='upload-right-middle'>
+                                        <textarea 
+                                            maxLength="2200" 
+                                            onChange={(e) => handleChange(e)}
+                                            value={caption}
+                                        />
+                                    </div>
+                                    <div className='upload-right-bottom'>
+                                        <div className='upload-right-bottom-icons'>
+                                            <div className='emoji-picker-wrapper'>
+                                                <div className='upload-right-bottom-img' onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                                                    <svg aria-label="Emoji" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Emoji</title><path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path></svg>
+                                                </div>
                                             </div>
                                             <div className='charcount'>
                                                 <span>{charcount}/2,200</span>
                                             </div>
-                                            </div>
                                         </div>
+                                        {showEmojiPicker && (
+                                            <>
+                                                <div className='emoji-picker-overlay' onClick={() => setShowEmojiPicker(false)}></div>
+                                                <EmojiPicker 
+                                                    onEmojiClick={onEmojiClick}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        bottom: '0%',
+                                                        left: '18%',
+                                                        zIndex: '9999',
+                                                        boxShadow: '0 2px 16px rgba(0, 0, 0, 0.1)',
+                                                        marginBottom: '8px'
+                                                    }}
+                                                />
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                        ) : (<div className='create'>
+                        </div>
+                    ) : (
+                        <div className='create'>
                             <div className='create-head'>
                                 <span>Create New Post</span>
                             </div>
@@ -139,14 +219,24 @@ const Create = ({ isOpen, onClose }) => {
                                     <span>Drag photos and videos here</span>
                                 </div>
                                 <div className='submit'>
-                                    <label htmlFor='upload'><button onClick={() => document.getElementById('upload').click()}>Select from Computer</button></label>
-                                    <input onChange={handleFileChange} type='file' id='upload' name='upload' accept="image/jpeg image/png image/jpg" />
+                                    <label htmlFor='upload'>
+                                        <button onClick={() => document.getElementById('upload').click()} className='p-1 m-1 px-2 py-1 rounded-md bg-blue-500 text-white'>
+                                            Select from Computer
+                                        </button>
+                                    </label>
+                                    <input 
+                                        onChange={handleFileChange} 
+                                        type='file' 
+                                        id='upload' 
+                                        name='upload' 
+                                        accept="image/jpeg,image/png,image/jpg,image/gif" 
+                                    />
                                 </div>
                             </div>
-                        </div>)}
-                    </>
-                )
-            }
+                        </div>
+                    )}
+                </>
+            )}
         </>
     );
 };

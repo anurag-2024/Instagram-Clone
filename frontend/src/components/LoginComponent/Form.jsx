@@ -1,15 +1,17 @@
-import React ,{useState} from 'react'
-import axios from 'axios'
+import React from 'react'
 import {useNavigate} from "react-router-dom"
-import { Container, Row, Col, Form, Button } from 'reactstrap'
-import { BASE_URL } from '../../utilis/config';
+import { Form, Button } from 'reactstrap'
 import Cookies from 'js-cookie';
 import toast, {Toaster} from "react-hot-toast";
 import {loginValidation} from "../../helper/validate";
 import {useFormik} from "formik";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../Store/slices/authSlice';
 
 const form = () => {
     const navigate=useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error, user } = useSelector((state) => state?.auth || {});
     const handleSubmit = async (e) => {
         e.preventDefault();
         const loadingToast = toast.loading('Logging In...');
@@ -24,21 +26,20 @@ const form = () => {
             else{
                 username=formik.values.emailorphoneorusername;
             }
-            const res=await axios.post(`${BASE_URL}/login`, { username:username, password:formik.values.password, email:email ,mobile:mobile });
-            if(res?.status===200){
-                console.log(res?.data);
-                Cookies.set('token', res?.data?.token, { expires: 1 });
-                toast.success("Logged In Successfully!",{id:loadingToast});
-                navigate("/");
-            }   
-            else{
-                toast.error("Login Failed!",{id:loadingToast});
-            }
+            const result = await dispatch(loginUser({ 
+                username, 
+                email, 
+                mobile, 
+                password: formik.values.password 
+            })).unwrap();
+            console.log(result);
+            Cookies.set('token', result.token, { expires: 1 });
+            toast.success("Logged In Successfully!", {id: loadingToast});
+            navigate("/");
         }
         catch(err){
             console.error("Error during login:", err);
-            toast.error(err?.response?.data?.message,{id:loadingToast});
-            res.status(400).json({ message: err.message });
+            toast.error(err?.message || "Login Failed!", {id: loadingToast});
         }
     }
     const formik=useFormik({

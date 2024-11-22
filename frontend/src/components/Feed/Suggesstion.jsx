@@ -1,28 +1,46 @@
 import React from 'react';
-import "./Suggesstion.scss";
-import img01 from '../../assets/profileimages/img01.jpg';
 import { useNavigate } from 'react-router-dom';
-const Suggesstion = (props) => {
-  const navigate=useNavigate();
+
+const Suggestion = (props) => {
+  const navigate = useNavigate();
   const maxSentenceLength = 28;
   const sentence = `Followed by ${props.name} +76 more..`;
+
   return (
-    <div className='suggestion'>
-      <div className='feed-right-suggesstion-list-img' onClick={()=>navigate(`${props.username}`)}>
-        <img src={props.img} alt='' />
+    <div className="w-full flex items-center justify-between py-2">
+      <div 
+        className="w-12 h-12 cursor-pointer" 
+        // onClick={() => navigate(`/user/${props._id}`)}
+      >
+        <img 
+          src={props.img} 
+          alt="" 
+          className="w-full h-full rounded-full object-cover"
+        />
       </div>
-      <div className='suggesstion-box'>
-        <div className='feed-right-suggesstion-list-username' onClick={()=>navigate(`${props.username}`)}>
-          <p>{props.username}</p>
+
+      <div className="flex-grow mx-4">
+        <div 
+          className="cursor-pointer" 
+          // onClick={() => navigate(`/user/${props._id}`)}
+        >
+          <p className="text-base font-semibold">{props.username}</p>
         </div>
-        <div className='feed-right-suggesstion-list-followedby'>
-          <p>{sentence.slice(0, maxSentenceLength)}{sentence.length > maxSentenceLength ? '...' : ''}</p>
+        <div>
+          <p className="text-sm text-gray-500">
+            {sentence.slice(0, maxSentenceLength)}
+            {sentence.length > maxSentenceLength ? '...' : ''}
+          </p>
         </div>
       </div>
-      <div className='feed-right-suggesstion-list-follow'>
-        <p>Follow</p>
+
+      <div className="mr-4">
+        <p className="text-sm font-semibold text-[#0095F6] cursor-pointer">
+          Follow
+        </p>
       </div>
     </div>
-  )
-}
-export default Suggesstion;
+  );
+};
+
+export default Suggestion;

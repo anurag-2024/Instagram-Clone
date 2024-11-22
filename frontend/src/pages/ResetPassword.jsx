@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import "../styles/ResetPassword.scss"
 import { Form } from 'reactstrap'
 import reset1 from "../assets/login/reset1.png"
@@ -6,80 +6,47 @@ import { useNavigate } from 'react-router-dom'
 import toast, { Toaster } from "react-hot-toast";
 import { resetValidation } from "../helper/validate";
 import { useFormik } from "formik";
-import axios from 'axios';
-import { API_KEY } from '../utilis/config'
-import { BASE_URL } from '../utilis/config';
-import { useDispatch} from 'react-redux';
-import { setEmail,setMobile } from '../Store/todoSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { generateOTP, sendOTPEmail, verifyMobile, setResetEmail, setResetMobile } from '../Store/slices/authSlice';
+
 const ResetPassword = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { loading } = useSelector(state => state.auth);
+
     const handleSubmit = async () => {
         const loadingToast = toast.loading('Sending OTP...');
         try {
-            const res = await axios.get(`${BASE_URL}/generateOTP`);
-            if (res?.status === 201) {
-                const value = res?.data?.code;
-                console.log("Generated",value);
-                const emailormobile = formik.values.emailormobile;
-                if (emailormobile.includes("@")) {
-                    const email = encodeURIComponent(emailormobile);
-                    dispatch(setEmail({email:emailormobile}));
-                    const response = await axios.post(`${BASE_URL}/registerMail`, { email: email, subject: "Reset Password OTP", username: "User", otp: value });
-                    if (response.status === 200) {
-                        toast.success("OTP Sent Successfully!", { id: loadingToast });
-                        navigate("/otp");
-                    }
-                    else {
-                        toast.error("OTP not Sent!!", { id: loadingToast });
-                    }
-                }
-                else {
-                    dispatch(setMobile({mobile:emailormobile}));
-                    const response = await axios.post(`${BASE_URL}/verifyMobile`, { mobile: emailormobile });
-                    if (response.status === 200) {
-                        const encodedParams = new URLSearchParams();
-                        encodedParams.set('to', `+91${emailormobile}`);
-                        encodedParams.set('p', `${API_KEY}`);
-                        encodedParams.set('text', 'Your OTP is ' + value);
-                        const options = {
-                            method: 'POST',
-                            url: 'https://sms77io.p.rapidapi.com/sms',
-                            headers: {
-                                'content-type': 'application/x-www-form-urlencoded',
-                                'X-RapidAPI-Key': '7658cc4c99msh4863d21e362a711p15cabcjsn82b6d3083eea',
-                                'X-RapidAPI-Host': 'sms77io.p.rapidapi.com'
-                            },
-                            data: encodedParams,
-                        };
-                        try {
-                            const response = await axios.request(options);
-                            if (response.status === 200) {
-                                toast.success("OTP Sent Successfully!", { id: loadingToast });
-                                navigate("/otp");
-                            }
-                            else {
-                                toast.error("OTP Sent!", { id: loadingToast });
-                            }
-                        } catch (error) {
-                            console.error(error);
-                        }
-                    }
-                    else {
-                        toast.error("Mobile number not registered yet!!", { id: loadingToast });
-                    }
-                }
+            const otpResult = await dispatch(generateOTP()).unwrap();
+            const value = otpResult.code;
+            
+            const emailormobile = formik.values.emailormobile;
+            
+            if (emailormobile.includes("@")) {
+                dispatch(setResetEmail({ email: emailormobile }));
+                await dispatch(sendOTPEmail({ 
+                    email: emailormobile, 
+                    otp: value 
+                })).unwrap();
+                
+                toast.success("OTP Sent Successfully!", { id: loadingToast });
+                navigate("/otp");
+            } else {
+                dispatch(setResetMobile({ mobile: emailormobile }));
+                await dispatch(verifyMobile({ 
+                    mobile: emailormobile, 
+                    otp: value 
+                })).unwrap();
+                
+                toast.success("OTP Sent Successfully!", { id: loadingToast });
+                navigate("/otp");
             }
-            else {
-                toast.error("OTP not sent", { id: loadingToast });
-                console.log({ message: "OTP not sent" });
-            }
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err);
-            toast.error(err?.response?.data?.message, { id: loadingToast });
+            toast.error(err.message || "Failed to send OTP", { id: loadingToast });
         }
     }
+
     const formik = useFormik({
         initialValues: {
             emailormobile: "",
@@ -88,7 +55,7 @@ const ResetPassword = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: handleSubmit,
-    })
+    });
 
     return (
         <>
@@ -111,10 +78,18 @@ const ResetPassword = () => {
 
                         <Form onSubmit={formik.handleSubmit}>
                             <div className='resetPassword-input'>
-                                <input {...formik.getFieldProps("emailormobile")} type="text" id='emailormobile' placeholder="Email or Phone" />
+                                <input 
+                                    {...formik.getFieldProps("emailormobile")} 
+                                    type="text" 
+                                    id='emailormobile' 
+                                    placeholder="Email or Phone" 
+                                    disabled={loading}
+                                />
                             </div>
                             <div className='resetPassword-input'>
-                                <button type='submit'>Send OTP</button>
+                                <button type='submit' disabled={loading}>
+                                    {loading ? 'Sending...' : 'Send OTP'}
+                                </button>
                             </div>
                         </Form>
 
@@ -128,7 +103,7 @@ const ResetPassword = () => {
                             <span onClick={() => navigate("/register")}>Create New Account</span>
                         </div>
                         <div className='resetPassword-back'>
-                            <span>Back to Login</span>
+                            <span onClick={() => navigate("/login-redirected")}>Back to Login</span>
                         </div>
                     </div>
                 </div>

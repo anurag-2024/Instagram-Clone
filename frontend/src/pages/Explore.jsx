@@ -1,13 +1,16 @@
 import React,{useState} from 'react'
 import "../styles/Explore.scss"
-import { cards } from "../components/Feed/images"
 import Sidebar from '../components/Sidebar/Sidebar'
 import { useNavigate } from 'react-router-dom';
+import {IoHeartOutline} from "react-icons/io5";
+import {IoChatbubbleOutline} from "react-icons/io5";
 import Create from '../components/Create/Create';
+import { useSelector } from 'react-redux';
 const Explore = () => {
     const navigate = useNavigate();
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
-
+   const {posts}=useSelector((state)=>state.post);
+   console.log(posts);
   const openCreateModal = () => {
     setCreateModalOpen(true);
   };
@@ -20,10 +23,18 @@ const Explore = () => {
             <div className="explore">
                 <div className="exploreWrapper">
                     <div className="exploreGrid">
-                        {cards.map((card,index) => {
+                        {posts?.map((post,index) => {
                             return (
                                 <div className="exploreGridItem">
-                                    <img src={card} alt="explore" onClick={()=>navigate(`/p/${index}`)}  />
+                                    <div className="imageContainer">
+                                        <img src={post?.image} alt="explore" onClick={()=>navigate(`/p/${post?._id}`)} />
+                                        <div className="overlay">
+                                            <div className="stats">
+                                                <span><IoHeartOutline className="text-2xl"/> {post?.likes?.length || 0}</span>
+                                                <span><IoChatbubbleOutline className="text-2xl"/> {post?.comments?.length || 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             )
                         })}

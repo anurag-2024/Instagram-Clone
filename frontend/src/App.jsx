@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Login from './pages/Login'
 import Register from './pages/Register'
 import LoginRedirected from './pages/LoginRedirected';
@@ -12,8 +13,17 @@ import Story from './pages/Story';
 import Cookies from 'js-cookie';
 import Settings from './pages/Settings';
 import { Navigate } from 'react-router';
+import { io } from 'socket.io-client';  
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 function App() {
+  const socket=io(import.meta.env.VITE_REACT_APP_SOCKET_URL);
+   useEffect(()=>{
+    socket.on('connect',()=>{
+      console.log(socket.id);
+    })
+   },[])
+
+
   const ProtectRoute=({children})=>{
     const token=Cookies.get('token');
     if(!token){
@@ -33,7 +43,7 @@ function App() {
           <Route path="/set-password" element={<SetPassword/>} />
           <Route path="/explore" element={<Explore/>} />
           <Route path="/otp" element={<OTP/>} />
-          <Route path="/:username" element={<UserProfile/>} />
+          <Route path="/user/:id" element={<UserProfile/>} />
           <Route path="/p/:postId" element={<Post/>} />
           <Route path="/stories/:username/:storyId" element={<Story/>} />
           <Route path="/accounts/edit" element={<Settings/>}/>

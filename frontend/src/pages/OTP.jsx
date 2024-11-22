@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import "../styles/ResetPassword.scss"
 import { Form } from 'reactstrap'
 import reset1 from "../assets/login/reset1.png"
 import { useNavigate } from 'react-router-dom'
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
-import axios from 'axios';
-import { BASE_URL } from '../utilis/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { verifyOTP } from '../Store/slices/authSlice';
 
 const ResetPassword = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector(state => state.auth);
     const [otp, setOtp] = useState("");
+
     const handleSubmit = async () => {
         const loadingToast = toast.loading('Verifying OTP...');
         try {
-            const res = await axios.get(`${BASE_URL}/verifyOTP`, { params:{otp: otp }});
-            if (res?.status === 200) {
-                toast.success(res?.data?.message, { id: loadingToast });
-                navigate("/set-password");
-            }
-            else {
-                toast.error("OTP not Verified!!", { id: loadingToast });
-            }
-        }
-        catch (err) {
-            toast.error(err?.response?.data?.message, { id: loadingToast });
+            const result = await dispatch(verifyOTP(otp)).unwrap();
+            toast.success(result.message, { id: loadingToast });
+            navigate("/set-password");
+        } catch (err) {
+            toast.error(err.message || "OTP Verification Failed!", { id: loadingToast });
         }
     }
+
     const formik = useFormik({
         initialValues: {
             otp: "",
@@ -34,7 +32,8 @@ const ResetPassword = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: handleSubmit,
-    })
+    });
+
     return (
         <>
             <div className='resetPassword'>
@@ -56,15 +55,24 @@ const ResetPassword = () => {
 
                         <Form onSubmit={formik.handleSubmit}>
                             <div className='resetPassword-input'>
-                                <input {...formik.getFieldProps("otp")} type="text" id='otp' placeholder="OTP*" onChange={(e) => {
-                                    formik.handleChange(e);
-                                    setOtp(e.target.value);
-                                }} />
+                                <input 
+                                    {...formik.getFieldProps("otp")} 
+                                    type="text" 
+                                    id='otp' 
+                                    placeholder="OTP*" 
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        setOtp(e.target.value);
+                                    }} 
+                                />
                             </div>
                             <div className='resetPassword-input'>
-                                <button type='submit'>Submit</button>
+                                <button type='submit' disabled={loading}>
+                                    {loading ? 'Verifying...' : 'Submit'}
+                                </button>
                             </div>
                         </Form>
+
                         <div className='resetPassword-or'>
                             <div className='resetPassword-or-line'></div>
                             <div className='resetPassword-or-text'>OR</div>
@@ -75,7 +83,7 @@ const ResetPassword = () => {
                             <span onClick={() => navigate("/register")}>Create New Account</span>
                         </div>
                         <div className='resetPassword-back'>
-                            <span>Back to Login</span>
+                            <span onClick={() => navigate("/login-redirected")}>Back to Login</span>
                         </div>
                     </div>
                 </div>

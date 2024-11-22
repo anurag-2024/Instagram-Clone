@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     mobile:{
-        type:String,  
+        type: String,
+        unique: true,
+        sparse: true,
+        default: undefined,
     },
     password: {
       type: String,
@@ -32,7 +35,8 @@ const userSchema = new mongoose.Schema(
       type:String
     },
     post:{
-      type:Array,
+      type:[mongoose.Schema.Types.ObjectId],
+      ref:"Post",
       default:[],
     },
     role: {

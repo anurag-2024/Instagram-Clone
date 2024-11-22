@@ -1,41 +1,45 @@
-import React,{useState}from 'react'
+import React from 'react'
 import { Icon } from '@iconify/react';
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 import "../styles/Register.scss";
-import axios from 'axios';
 import toast, {Toaster} from "react-hot-toast";
 import {useFormik} from "formik";
 import {registerValidation} from "../helper/validate";
 import {useNavigate} from "react-router-dom"
-import { BASE_URL } from '../utilis/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../Store/slices/authSlice';
+
 const Register = () => {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading, error } = useSelector(state => state.auth);
 
     const handleSubmit = async () => {
         const loadingToast = toast.loading('Registering...');
-        try{
-            let email,mobile;
-            if(formik.values.emailormobile.includes("@")){
-                 email=formik.values.emailormobile;
+        try {
+            let email, mobile;
+            if(formik.values.emailormobile.includes("@")) {
+                email = formik.values.emailormobile;
+            } else {
+                mobile = formik.values.emailormobile;
             }
-            else{
-                mobile=formik.values.emailormobile;
-            }
-            const credentials = { username:formik.values.username, password:formik.values.password, fullName:formik.values.fullName, email:email ,mobile:mobile };
-            const res=await axios.post(`${BASE_URL}/register`,credentials);
-            if(res.status===201){
-                toast.success("Registered Successfully!",{id:loadingToast});
-                navigate("/login-redirected");
-            }  
-            else{
-                toast.error("Registration Failed!",{id:loadingToast});
-            }
-        }
-        catch(err){
-            toast.error("Internal Server Error",{id:loadingToast});
+
+            const result = await dispatch(registerUser({ 
+                username: formik.values.username, 
+                password: formik.values.password, 
+                fullName: formik.values.fullName, 
+                email, 
+                mobile 
+            })).unwrap();
+
+            toast.success("Registered Successfully!", {id: loadingToast});
+            navigate("/login-redirected");
+        } catch (err) {
+            toast.error(err.message || "Registration Failed!", {id: loadingToast});
             console.error("Error during registration:", err);
         }
     }
+
     const formik = useFormik({
         initialValues: {
             emailormobile: "",
@@ -47,7 +51,8 @@ const Register = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: handleSubmit,
-      });
+    });
+
     return (
         <>
             <div className='register'>

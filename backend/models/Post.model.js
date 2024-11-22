@@ -5,13 +5,6 @@ const PostSchema=new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:"User",
     },
-    username:{
-        type:String,
-        required:true,
-    },
-    profile:{
-        type:String,
-    },
     image:{
         type:String,
         required:true,
@@ -21,11 +14,13 @@ const PostSchema=new mongoose.Schema({
         required:true,
     },
     likes:{
-        type:Array,
+        type:[mongoose.Schema.Types.ObjectId],
+        ref:"User",
         default:[],
     },
     comments:{
-        type:Array,
+        type:[mongoose.Schema.Types.ObjectId],
+        ref:"Comment",
         default:[],
     }
 },

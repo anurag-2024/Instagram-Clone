@@ -14,7 +14,7 @@ const Home = () => {
   }
   return (
     <div className={`homeContainer ${isCreateModalOpen &&'disablePointerEvents'}`}>
-      <Sidebar onCreateClick={openCreateModal}/>
+      <Sidebar onCreateClick={openCreateModal} isCreateModalOpen={isCreateModalOpen}/>
       <Feed/>
       <Create isOpen={isCreateModalOpen} onClose={closeCreateModal} />
     </div>

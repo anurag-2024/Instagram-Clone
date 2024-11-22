@@ -15,6 +15,6 @@ export const verifyUser=(req,res,next)=>{
        })
     }
     catch(err){
-        res.send(500).json({message:"Internal Server Error"})
+        res.status(500).json({message:"Internal Server Error"})
     }
 }
