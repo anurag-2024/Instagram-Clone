@@ -57,7 +57,6 @@ export async function registerValidation(values){
             }
         }
     }
-    console.log("errors",errors);
     return errors;
 }
 function passwordVerfiy(error={},values){
@@ -78,7 +77,6 @@ function passwordVerfiy(error={},values){
 }
 
 function usernameVerfiy(error={},values){
-    console.log("username",values.username);
     if(!values.username){
         error.username=toast.error("Username is required...");
     }

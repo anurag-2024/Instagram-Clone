@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 
 const BASE_URL = import.meta.env.VITE_REACT_APP_BASE_URL;
 const API_KEY = import.meta.env.VITE_REACT_APP_API_KEY;
-console.log(BASE_URL,API_KEY);
 const initialState = {
     user: null,
     loading: false,
@@ -17,7 +16,6 @@ export const loginUser = createAsyncThunk(
     "auth/login",
     async ({ username, email, mobile, password }, { rejectWithValue }) => {
         try {
-            console.log(BASE_URL);
             const res = await axios.post(`${BASE_URL}/login`, { 
                 username, 
                 password, 

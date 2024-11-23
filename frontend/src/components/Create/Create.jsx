@@ -71,7 +71,6 @@ const Create = ({ isOpen, onClose }) => {
                 userId,
                 image: base64Image,
             };
-            console.log(data);
             await dispatch(createPost(data)).unwrap();
             dispatch(getAllPosts({page: 1, limit: 10}));
             window.scrollTo(0,0);

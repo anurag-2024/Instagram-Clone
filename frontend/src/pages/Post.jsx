@@ -31,14 +31,12 @@ const Post = () => {
   const {user}=useSelector((state)=>state.auth);
   const {post,loading,error}=useSelector((state)=>state.post);
   const {likedPosts}=useSelector((state)=>state.post);
-  console.log(likedPosts);
   const isLiked=likedPosts.posts?.find((p)=>p?._id===post?.post?._id);
   useEffect(()=>{
     if(isLiked){
       setLike(true);
     }
   },[isLiked]);
-  console.log(post);
   const [localLikes,setLocalLikes]=useState(post?.likes?.length || 0);
   const localPost=post?.post;
   useEffect(()=>{

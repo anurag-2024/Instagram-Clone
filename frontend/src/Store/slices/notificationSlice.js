@@ -36,12 +36,14 @@ const notificationSlice = createSlice({
     },
     addNotification: (state, action) => {
       const newNotification = action.payload;
+      
       const exists = state.notifications.some(notif => 
         notif.id === newNotification.id || notif._id === newNotification._id
       );
+      
       if (!exists) {
         state.notifications = [newNotification, ...state.notifications];
-      }
+      } 
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

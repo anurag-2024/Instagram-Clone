@@ -53,10 +53,8 @@ const Notification = () => {
     dispatch(fetchNotifications());
   }, [dispatch]);
 
-  // Add this useEffect to handle real-time updates
   useEffect(() => {
-    // This will run whenever notifications state changes in Redux
-    console.log('Notifications updated:', notifications);
+    console.log('Notifications updated');
   }, [notifications,loading]);
 
   return (

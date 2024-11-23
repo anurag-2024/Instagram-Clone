@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Login from './pages/Login'
 import Register from './pages/Register'
 import LoginRedirected from './pages/LoginRedirected';
@@ -21,42 +21,72 @@ import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const socket = io(import.meta.env.VITE_REACT_APP_SOCKET_URL, {
-    auth: {
-      token: Cookies.get('token')
-    }
-  });
   const dispatch = useDispatch();
+  const socketRef = React.useRef(null);
+
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      socket.connect();
+      // Decode user ID from token
+      const userId = JSON.parse(atob(token.split('.')[1])).userId;
       
-      socket.on('connect', () => {
-        console.log('Socket connected:', socket.id);
-        const userId = JSON.parse(atob(token.split('.')[1])).userId;
-        socket.emit('user_connected', userId);
+      // Create socket connection
+      socketRef.current = io(import.meta.env.VITE_REACT_APP_SOCKET_URL, {
+        auth: { token },
+        transports: ['websocket'],
+        reconnection: true,
+        query: { userId } // Add userId to query
       });
 
-      
-      socket.on('newNotification', (notification) => {
-        console.log('New notification received:', notification);
-        dispatch(addNotification({
-          ...notification,
-          id: notification._id
-        }));
-        if(notification.type === "comment"){
-            toast.success(`${notification.fromUser} commented on your post: "${notification.message.split('commented on your post')[1]}"`);
+      // Connection event handlers
+      socketRef.current.on('connect', () => {
+        // Emit user_connected event with userId
+        socketRef.current.emit('user_connected', userId);
+        toast.success('Connected to notifications');
+      });
+
+      // Add reconnection handlers
+      socketRef.current.on('reconnect', () => {
+        socketRef.current.emit('user_connected', userId);
+      });
+
+      socketRef.current.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+        toast.error('Notification connection failed');
+      });
+
+      // Notification handler
+      socketRef.current.on('newNotification', (notification) => {
+        try {
+          // Dispatch to Redux
+          dispatch(addNotification({
+            ...notification,
+            id: notification._id || notification.id
+          }));
+
+          // Show toast
+          if (notification.type === "comment") {
+            toast.success(`${notification.fromUser} commented: "${notification.message.split('commented on your post')[1]}"`, {
+              duration: 4000
+            });
           } else {
-          toast.success(`${notification.fromUser} ${notification.message}`);
+            toast.success(`${notification.fromUser} ${notification.message}`, {
+              duration: 4000
+            });
+          }
+        } catch (error) {
+          console.error('Error handling notification:', error);
         }
       });
     }
 
     return () => {
-      if (socket) {
-        socket.off('newNotification');
-        socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.off('newNotification');
+        socketRef.current.off('connect');
+        socketRef.current.off('connect_error');
+        socketRef.current.off('reconnect');
+        socketRef.current.disconnect();
       }
     };
   }, [dispatch]);

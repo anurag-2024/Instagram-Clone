@@ -15,7 +15,6 @@ export const getUser = createAsyncThunk(
             const res = await axios.get(`${BASE_URL}/user/${id}`);
             return res.data.data;
         } catch (err) {
-            console.log(err);
             return rejectWithValue(err.response.data);
         }
     }

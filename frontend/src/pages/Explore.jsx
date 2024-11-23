@@ -10,7 +10,6 @@ const Explore = () => {
     const navigate = useNavigate();
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
    const {posts}=useSelector((state)=>state.post);
-   console.log(posts);
   const openCreateModal = () => {
     setCreateModalOpen(true);
   };

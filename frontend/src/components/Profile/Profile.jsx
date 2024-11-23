@@ -16,7 +16,6 @@ import { Skeleton } from '@mui/material';
 const Profile = () => {
     const [active, setactive] = useState([true, false, false]);
     const { id } = useParams();
-    console.log(id);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user, loading, error } = useSelector(state => state.user);

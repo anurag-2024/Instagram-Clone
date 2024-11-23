@@ -20,25 +20,31 @@ try {
     io = new Server(server, {
         cors: {
             origin: "*",
-            methods: ["GET", "POST", "PUT", "DELETE"]
-        }
+            methods: ["GET", "POST", "PUT", "DELETE"],
+            credentials: true
+        },
+        transports: ['websocket', 'polling']
     });
     
     const connectedUsers = new Map();
 
     io.on('connection', (socket) => {
-        console.log('A user connected:', socket.id);
+        const userId = socket.handshake.query.userId;
+        if (userId) {
+            connectedUsers.set(userId.toString(), socket.id);
+        }
 
         socket.on('user_connected', (userId) => {
-            connectedUsers.set(userId, socket.id);
-            console.log(`User ${userId} connected with socket ${socket.id}`);
+            if (!userId) {
+                return;
+            }
+            connectedUsers.set(userId.toString(), socket.id);
         });
 
         socket.on('disconnect', () => {
             for (const [userId, socketId] of connectedUsers.entries()) {
                 if (socketId === socket.id) {
                     connectedUsers.delete(userId);
-                    console.log(`User ${userId} disconnected`);
                     break;
                 }
             }
@@ -50,7 +56,7 @@ try {
     
     console.log("Socket setup successful");
 } catch(err) {
-    console.log("Socket setup failed:", err);
+    console.error("Socket setup failed:", err);
 }
 dotenv.config();
 app.use(cors());

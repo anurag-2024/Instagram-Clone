@@ -24,7 +24,7 @@ export const createPost = async (req, res) => {
             ...req.body,
             image: imageUrl
         });
-        await User.findByIdAndUpdate(req.user.userId, { $push: { posts: newPost._id } });
+        await User.findByIdAndUpdate(req.user.userId, { $push: { post: newPost._id } });
         res.status(201).json({
             success: true,
             message: "Post created successfully",
@@ -87,7 +87,7 @@ export const getAllPosts = async (req, res) => {
             }
         });
     } catch (err) {
-        console.log('Error in getAllPosts:', err);
+        
         res.status(400).json({ success: false, message: err.message });
     }
 }
@@ -107,7 +107,7 @@ export const getPostById = async (req, res) => {
                 }
             })
             .lean();
-        console.log(post);
+       
         res.status(200).json({ post });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
@@ -135,11 +135,18 @@ export const likePost = async (req, res) => {
                 message: "liked your post"
             });
 
-            // Get socket ID from connected users map
-            const socketId = global.connectedUsers.get(post.userId._id.toString());
+            const targetUserId = post.userId._id.toString();
+            const socketId = global.connectedUsers.get(targetUserId);
+            
             if (socketId) {
-                global.io.to(socketId).emit("newNotification", notification);
-            }
+                global.io.to(socketId).emit("newNotification", {
+                    _id: notification._id,
+                    type: notification.type,
+                    fromUser: notification.fromUser,
+                    message: notification.message,
+                    createdAt: notification.createdAt
+                });
+            } 
         }
 
         res.status(200).json({ success: true, post: updatedPost });
@@ -159,8 +166,6 @@ export const unlikePost = async (req, res) => {
 
 export const commentPost = async (req, res) => {
     try {
-        console.log(req.body);
-        console.log(req.user);
         const newComment = await Comment.create({
             ...req.body,
             userId: req.user.userId,
@@ -186,10 +191,17 @@ export const commentPost = async (req, res) => {
                 message: `commented on your post ${req.body.comment}`
             });
 
-            // Get socket ID from connected users map
-            const socketId = global.connectedUsers.get(post.userId.toString());
+            const targetUserId = post.userId.toString();
+            const socketId = global.connectedUsers.get(targetUserId);
+            
             if (socketId) {
-                global.io.to(socketId).emit("newNotification", notification);
+                global.io.to(socketId).emit("newNotification", {
+                    _id: notification._id,
+                    type: notification.type,
+                    fromUser: notification.fromUser,
+                    message: notification.message,
+                    createdAt: notification.createdAt
+                });
             }
 
             await User.findByIdAndUpdate(req.user.userId, { $push: { notifications: notification._id } });
@@ -197,7 +209,6 @@ export const commentPost = async (req, res) => {
 
         res.status(200).json({ success: true, post });
     } catch (err) {
-        console.log(err);
         res.status(400).json({ success: false, message: err.message });
     }
 }
@@ -223,7 +234,6 @@ export const deletePost = async (req, res) => {
 
 export const getPostsByUserId = async (req, res) => {
     try {
-        console.log(req.params.id);
         const posts = await Post.find({ userId: req.params.id })
             .populate({
                 path: "userId",
