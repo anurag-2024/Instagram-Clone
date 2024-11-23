@@ -128,7 +128,6 @@ const Create = ({ isOpen, onClose }) => {
         <>
             {isOpen && (
                 <>
-                    <Toaster position='top-center' reverseOrder={false} />
                     <div className='body-blur'></div>
                     <div className='cross-container' onClick={handleClose}>
                         <RxCross2 className='cross' />
