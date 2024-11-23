@@ -14,5 +14,5 @@ router.post("/deleteComment/:id/:commentId", verifyUser, deleteComment);
 router.delete("/deletePost/:id", verifyUser, deletePost);
 router.get("/likedPosts", verifyUser, likedPosts);
 
-
+    
 export default router;

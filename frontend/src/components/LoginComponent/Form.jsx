@@ -43,8 +43,8 @@ const form = () => {
     }
     const formik=useFormik({
         initialValues:{
-            emailorphoneorusername:"",
-            password:"",
+            emailorphoneorusername:"test@gmail.com",
+            password:"test@123",
         },
         validate:loginValidation,
         validateOnBlur:false,
