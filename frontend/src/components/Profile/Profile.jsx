@@ -10,33 +10,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { IoHeartOutline } from "react-icons/io5";
 import { IoChatbubbleOutline } from "react-icons/io5";
-import { getUserPosts, clearUserPosts } from '../../Store/slices/postSlice';
-import { setUser } from '../../Store/slices/authSlice';
+import { getUser, clearUser } from '../../Store/slices/userSlice';
 import { Skeleton } from '@mui/material';
 
 const Profile = () => {
     const [active, setactive] = useState([true, false, false]);
     const { id } = useParams();
+    console.log(id);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector(state => state.auth);
-    console.log(user);
-    useEffect(() => {
-        if (!user) {
-            const storedUser = JSON.parse(localStorage.getItem('user'));
-            if (storedUser) {
-                dispatch(setUser({ user: storedUser }));
-            }
-        }
-    }, [dispatch, user]);
-    const { userPosts, userPostsLoading } = useSelector(state => state?.post);
-    console.log(userPosts);
+    const { user, loading, error } = useSelector(state => state.user);
     useEffect(() => {
         if (id) {
-            dispatch(getUserPosts(id));
+            dispatch(getUser(id));
         }
         return () => {
-            dispatch(clearUserPosts());
+            dispatch(clearUser());
         };
     }, [dispatch, id]);
     const handleClick = (index) => {
@@ -156,7 +145,7 @@ const Profile = () => {
                     </div>
                     <div className='profile-down-posts'>
                         {active[0] && <div className='profile-down-posts-grid'>
-                            {userPostsLoading ? (
+                            {loading ? (
                                 Array(6).fill(0).map((_, index) => (
                                     <div key={index} className="profile-down-posts-grid-item">
                                         <Skeleton
@@ -175,7 +164,7 @@ const Profile = () => {
                                     </div>
                                 ))
                             ) : (
-                                userPosts.length > 0 ? userPosts.map((post) => (
+                                user?.post?.length > 0 ? user?.post?.map((post) => (
                                     <div key={post.id} className="profile-down-posts-grid-item" onClick={() => navigate(`/p/${post._id}`)} >
                                         <img src={post?.image} alt="explore" />
                                         <div className="overlay">
