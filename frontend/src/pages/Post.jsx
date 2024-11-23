@@ -109,7 +109,6 @@ const Post = () => {
     dispatch(commentPost({comment: comment, postId: postId}));
     setComment("");
     setShowEmojiPicker(false);
-    toast.success("Comment added successfully");
   }
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 

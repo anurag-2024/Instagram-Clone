@@ -8,16 +8,27 @@ import img01 from "../../assets/profileimages/img01.jpg";
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import {IoHeartOutline} from "react-icons/io5";
-import {IoChatbubbleOutline} from "react-icons/io5";
+import { IoHeartOutline } from "react-icons/io5";
+import { IoChatbubbleOutline } from "react-icons/io5";
 import { getUserPosts, clearUserPosts } from '../../Store/slices/postSlice';
+import { setUser } from '../../Store/slices/authSlice';
 import { Skeleton } from '@mui/material';
 
 const Profile = () => {
     const [active, setactive] = useState([true, false, false]);
     const { id } = useParams();
     const dispatch = useDispatch();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
+    const { user } = useSelector(state => state.auth);
+    console.log(user);
+    useEffect(() => {
+        if (!user) {
+            const storedUser = JSON.parse(localStorage.getItem('user'));
+            if (storedUser) {
+                dispatch(setUser({ user: storedUser }));
+            }
+        }
+    }, [dispatch, user]);
     const { userPosts, userPostsLoading } = useSelector(state => state?.post);
     console.log(userPosts);
     useEffect(() => {
@@ -47,12 +58,12 @@ const Profile = () => {
                     <div className='profile-wrapper'>
                         <div className='profile-wrapper-up'>
                             <div className='profile-photo'>
-                                <img src={img01} alt='profile' />
+                                <img src={user?.profile||img01} alt='profile' />
                             </div>
                             <div className='profile-desc'>
                                 <div className='profile-desc-up'>
                                     <div className='username'>
-                                        <span>iam_anurag2024</span>
+                                        <span>{user?.username}</span>
                                     </div>
                                     <div className='edit-profile'>
                                         <span>Edit Profile</span>
@@ -64,20 +75,20 @@ const Profile = () => {
                                 </div>
                                 <div className='profile-desc-middle'>
                                     <div className='posts'>
-                                        <span><span className='number'>0</span> Posts</span>
+                                        <span><span className='number'>{user?.post?.length||0}</span> Posts</span>
                                     </div>
                                     <div className='followers'>
-                                        <span><span className='number'>0</span> Followers</span>
+                                        <span><span className='number'>{user?.followers?.length||0}</span> Followers</span>
                                     </div>
                                     <div className='following'>
-                                        <span><span className='number'>0</span> Following</span>
+                                        <span><span className='number'>{user?.following?.length||0}</span> Following</span>
                                     </div>
                                 </div>
                                 <div className='profile-desc-down'>
-                                    <div className='fullname'>Anurag</div>
+                                    <div className='fullname'>{user?.fullname}</div>
                                     <div className='bio'>
-                                        <span>Hey there! I am using Instagram Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Hey there! I am using Instagram Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                                        </span>
+                                        <span>{user?.bio}</span>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -165,16 +176,16 @@ const Profile = () => {
                                 ))
                             ) : (
                                 userPosts.length > 0 ? userPosts.map((post) => (
-                                    <div key={post.id} className="profile-down-posts-grid-item" onClick={()=>navigate(`/p/${post._id}`)} >
+                                    <div key={post.id} className="profile-down-posts-grid-item" onClick={() => navigate(`/p/${post._id}`)} >
                                         <img src={post?.image} alt="explore" />
                                         <div className="overlay">
                                             <div className="stats">
                                                 <span>
-                                                    <IoHeartOutline /> 
+                                                    <IoHeartOutline />
                                                     {post?.likes?.length || 0}
                                                 </span>
                                                 <span>
-                                                    <IoChatbubbleOutline /> 
+                                                    <IoChatbubbleOutline />
                                                     {post?.comments?.length || 0}
                                                 </span>
                                             </div>

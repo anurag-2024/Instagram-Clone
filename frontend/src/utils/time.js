@@ -9,10 +9,10 @@ export const getRelativeTime = (timestamp) => {
       return 'Just now';
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+      return `${minutes} ${minutes === 1 ? 'min' : 'mins'} ago`;
     } else if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+      return `${hours} ${hours === 1 ? 'hr' : 'hrs'} ago`;
     } else if (diffInSeconds < 2592000) {
       const days = Math.floor(diffInSeconds / 86400);
       return `${days} ${days === 1 ? 'day' : 'days'} ago`;

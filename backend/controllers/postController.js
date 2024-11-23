@@ -2,6 +2,7 @@ import Post from '../models/Post.model.js';
 import cloudinary from '../utils/cloudinary.js';
 import Comment from '../models/Comment.model.js';
 import User from '../models/User.model.js';
+import Notification from '../models/Notification.model.js';
 
 export const createPost = async (req, res) => {
     try {
@@ -23,7 +24,7 @@ export const createPost = async (req, res) => {
             ...req.body,
             image: imageUrl
         });
-
+        await User.findByIdAndUpdate(req.user.userId, { $push: { posts: newPost._id } });
         res.status(201).json({
             success: true,
             message: "Post created successfully",
@@ -115,8 +116,31 @@ export const getPostById = async (req, res) => {
 
 export const likePost = async (req, res) => {
     try {
-        const post = await Post.findByIdAndUpdate(req.params.id, { $push: { likes: req.user.userId } }, { new: true });
-        res.status(200).json({ post });
+        const post = await Post.findById(req.params.id).populate('userId');
+        if (!post) {
+            return res.status(404).json({ success: false, message: "Post not found" });
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id, 
+            { $push: { likes: req.user.userId } }, 
+            { new: true }
+        );
+
+        const notification = await Notification.create({
+            userId: post.userId._id,
+            type: "like",
+            fromUser: req.user.username,
+            message: "liked your post"
+        });
+
+        // Get socket ID from connected users map
+        const socketId = global.connectedUsers.get(post.userId._id.toString());
+        if (socketId) {
+            global.io.to(socketId).emit("newNotification", notification);
+        }
+
+        res.status(200).json({ success: true, post: updatedPost });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }
@@ -138,7 +162,7 @@ export const commentPost = async (req, res) => {
         const newComment = await Comment.create({
             ...req.body,
             userId: req.user.userId,
-            postId: req.params.id
+            postId: req.params.id,
         });
         const post = await Post.findByIdAndUpdate(
             req.params.id, 
@@ -151,7 +175,21 @@ export const commentPost = async (req, res) => {
                 select: "fullName profile _id"
             }
         });
-        res.status(200).json({ post });
+        const notification = await Notification.create({
+            userId: post.userId,
+            type: "comment",
+            fromUser: req.user.username,
+            message: `commented on your post ${req.body.comment}`
+        });
+
+        // Get socket ID from connected users map
+        const socketId = global.connectedUsers.get(post.userId.toString());
+        if (socketId) {
+            global.io.to(socketId).emit("newNotification", notification);
+        }
+
+        await User.findByIdAndUpdate(req.user.userId, { $push: { notifications: notification._id } });
+        res.status(200).json({ success: true, post });
     } catch (err) {
         console.log(err);
         res.status(400).json({ success: false, message: err.message });

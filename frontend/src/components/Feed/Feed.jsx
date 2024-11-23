@@ -22,8 +22,6 @@ const Feed = () => {
   const [page,setPage]=useState(1);
   const user = useSelector(state => state?.auth?.user);
   const { posts, loading, error,pagination } = useSelector(state => state?.post || {});
-  console.log(pagination);
-  console.log(posts);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [allCaughtUp, setAllCaughtUp] = useState(false);
 

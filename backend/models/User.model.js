@@ -43,6 +43,21 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "user",
     },
+    notifications:{
+      type:[mongoose.Schema.Types.ObjectId],
+      ref:"Notification",
+      default:[],
+    },
+    followers:{
+      type:[mongoose.Schema.Types.ObjectId],
+      ref:"User",
+      default:[],
+    },
+    following:{
+      type:[mongoose.Schema.Types.ObjectId],
+      ref:"User",
+      default:[],
+    }
   },
   { timestamps: true }
 );

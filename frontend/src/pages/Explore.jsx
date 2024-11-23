@@ -26,8 +26,8 @@ const Explore = () => {
                         {posts?.map((post,index) => {
                             return (
                                 <div className="exploreGridItem">
-                                    <div className="imageContainer">
-                                        <img src={post?.image} alt="explore" onClick={()=>navigate(`/p/${post?._id}`)} />
+                                    <div className="imageContainer" onClick={()=>navigate(`/p/${post?._id}`)} >
+                                        <img src={post?.image} alt="explore" />
                                         <div className="overlay">
                                             <div className="stats">
                                                 <span><IoHeartOutline className="text-2xl"/> {post?.likes?.length || 0}</span>
