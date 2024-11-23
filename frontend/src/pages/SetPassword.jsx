@@ -67,7 +67,6 @@ const SetPassword = () => {
     return (
         <>
             <div className='resetPassword'>
-                <Toaster position='top-center' reverseOrder={false}></Toaster>
                 <div className='container'>
                     <div className='logo'>
                         <span>Instagram</span>

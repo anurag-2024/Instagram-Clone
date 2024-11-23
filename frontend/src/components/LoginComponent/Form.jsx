@@ -32,7 +32,6 @@ const form = () => {
                 mobile, 
                 password: formik.values.password 
             })).unwrap();
-            console.log(result);
             Cookies.set('token', result.token, { expires: 1 });
             toast.success("Logged In Successfully!", {id: loadingToast});
             navigate("/");
@@ -54,7 +53,6 @@ const form = () => {
     })
     return (
         <> 
-            <Toaster position='top-center' reverseOrder={false}></Toaster>
             <Form onSubmit={handleSubmit}>
                 <div className='login__form-input'>
                     <input {...formik.getFieldProps('emailorphoneorusername')} id='emailorphoneorusername' placeholder='Phone number, username, or email' required />

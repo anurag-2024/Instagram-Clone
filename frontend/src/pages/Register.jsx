@@ -56,7 +56,6 @@ const Register = () => {
     return (
         <>
             <div className='register'>
-            <Toaster position='top-center' reverseOrder={false}></Toaster>
                 <div className='register__box'>
                     <div className='register__side'>
                         <div className='register__form'>
