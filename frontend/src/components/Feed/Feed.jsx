@@ -21,7 +21,7 @@ const Feed = () => {
   const [showRight, setShowRight] = useState(true);
   const [page,setPage]=useState(1);
   const user = useSelector(state => state?.auth?.user);
-  const { posts, loading, error,pagination } = useSelector(state => state?.post || {});
+  const { posts, loading, error,pagination,initialPostLoading } = useSelector(state => state?.post || {});
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [allCaughtUp, setAllCaughtUp] = useState(false);
 
@@ -184,12 +184,12 @@ const Feed = () => {
         {/* Feed Cards */}
         <div className="mt-2">
           <div className="space-y-1">
-            {posts?.length > 0 ? (
-              posts.map((p, index) => (
-                <Card key={p._id || index} post={p} cardkey={index} />
-              ))
-            ) : (
+            {initialPostLoading ? (
               renderSkeletonLoaders()
+            ) : (
+                posts?.map((p, index) => (
+                  <Card key={p._id || index} post={p} cardkey={index} />
+                ))
             )}
           </div>
 
@@ -201,11 +201,11 @@ const Feed = () => {
             </div>
           )}
 
-          {allCaughtUp && !isLoadingMore && posts?.length > 0 && (
+          {allCaughtUp && !isLoadingMore &&(
             <div className="flex flex-col items-center justify-center p-8 my-8 text-center bg-white rounded-lg">
               <div className="w-12 h-12 flex items-center justify-center text-green-500 border-2 border-green-500 rounded-full bg-green-50 mb-4">✓</div>
               <h3 className="text-gray-800 text-lg font-semibold mb-2">You're all caught up</h3>
-              <p className="text-gray-500 text-sm mb-6">You've seen all new posts from the last 3 days</p>
+              <p className="text-gray-500 text-sm mb-6">You've seen all new posts</p>
               <div className="w-full border-b border-gray-200 relative">
                 <span 
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 

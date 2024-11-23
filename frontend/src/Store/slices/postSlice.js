@@ -12,6 +12,7 @@ const initialState = {
     error: null,
     likedPosts:[],
     pagination:{},
+    initialPostLoading:false,
     userPostsLoading:false
 };
 
@@ -213,17 +214,17 @@ export const postSlice = createSlice({
             })
 
             .addCase(getAllPosts.pending, (state) => {
-                state.loading = true;
+                state.initialPostLoading = true;
                 state.error = null;
             })
             .addCase(getAllPosts.fulfilled, (state, action) => {
-                state.loading = false;
+                state.initialPostLoading = action.payload?.pagination?.currentPage === 1 ? false : true;
                 state.error = null;
                 state.posts = action.payload?.pagination?.currentPage === 1 ? action.payload?.posts : [...state.posts,...action.payload?.posts];
                 state.pagination = action.payload?.pagination;
             })
             .addCase(getAllPosts.rejected, (state, action) => {
-                state.loading = false;
+                state.initialPostLoading = false;
                 state.error = action.payload?.message;
             })
 
