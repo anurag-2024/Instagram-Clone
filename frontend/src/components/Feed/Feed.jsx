@@ -10,7 +10,7 @@ import Carousel from '../carousel/Carousel.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../Store/slices/authSlice.js";
-import { getAllPosts,getUserPosts,getLikedPosts } from '../../Store/slices/postSlice';
+import { getAllPosts,getLikedPosts } from '../../Store/slices/postSlice';
 import Skeleton from '@mui/material/Skeleton';
 
 const Feed = () => {

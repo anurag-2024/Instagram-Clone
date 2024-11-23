@@ -12,7 +12,6 @@ router.post("/unlikePost/:id", verifyUser, unlikePost);
 router.post("/commentPost/:id", verifyUser, commentPost);
 router.post("/deleteComment/:id/:commentId", verifyUser, deleteComment);
 router.delete("/deletePost/:id", verifyUser, deletePost);
-router.get("/getUserPosts/:id", getPostsByUserId);
 router.get("/likedPosts", verifyUser, likedPosts);
 
 

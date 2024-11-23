@@ -50,19 +50,6 @@ export const getAllPosts = createAsyncThunk(
     }
 );
 
-export const getUserPosts = createAsyncThunk(
-    "post/getUserPosts",
-    async (id, { rejectWithValue }) => {
-        try {
-            const res = await axios.get(`${BASE_URL}/getUserPosts/${id}`);
-            if (res.status === 200) {
-                return res.data.posts;
-            }
-        } catch (err) {
-            return rejectWithValue(err.response.data);
-        }
-    }
-);
 
 export const getLikedPosts = createAsyncThunk(
     "post/getLikedPosts",
@@ -227,21 +214,7 @@ export const postSlice = createSlice({
                 state.initialPostLoading = false;
                 state.error = action.payload?.message;
             })
-
-            .addCase(getUserPosts.pending, (state) => {
-                state.userPostsLoading = true;
-                state.error = null;
-            })
-            .addCase(getUserPosts.fulfilled, (state, action) => {
-                state.userPostsLoading = false;
-                state.error = null;
-                state.userPosts = action.payload;
-            })
-            .addCase(getUserPosts.rejected, (state, action) => {
-                state.userPostsLoading = false;
-                state.error = action.payload?.message;
-            })
-
+            
             .addCase(getPost.pending, (state) => {
                 state.loading = true;
                 state.error = null;

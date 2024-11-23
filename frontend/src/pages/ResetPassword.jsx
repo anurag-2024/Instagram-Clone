@@ -81,7 +81,7 @@ const ResetPassword = () => {
                                     {...formik.getFieldProps("emailormobile")} 
                                     type="text" 
                                     id='emailormobile' 
-                                    placeholder="Email or Phone" 
+                                    placeholder="Email" 
                                     disabled={loading}
                                 />
                             </div>

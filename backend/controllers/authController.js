@@ -165,7 +165,11 @@ export async function resetPassword(req, res) {
         if(!req.app.locals.resetSession) return res.status(400).send({error:"Session expired"});
         const {email,mobile,password} = req.body;
         try{
-            const user = await User.findOne({ $or: [{ email: email }, { mobile: mobile.toString() }] });
+            const query = { email };
+            if (mobile) {
+                query.$or = [{ email }, { mobile: mobile.toString() }];
+            }
+            const user = await User.findOne(query);
             if(!user) return res.status(400).send({error:"User not found"});
             const newPassword = await bcryptjs.hash(password, 10);
             await User.findByIdAndUpdate(user._id, {password: newPassword}, {new: true})
